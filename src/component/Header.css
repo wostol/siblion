@@ -1,0 +1,204 @@
+/* Header.css */
+.header {
+  background: white;
+  color: white;
+  padding: 0 50px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  position: relative;
+}
+
+/* Логотип */
+.logo-link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.logo-text {
+  font-size: 28px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.logo-image {
+  height: 90px;
+  width: 90px;
+}
+
+/* Основная навигация */
+.main-nav {
+  display: flex;
+}
+
+.nav-list {
+  
+  display: flex;
+  list-style: none;
+  gap: 40px;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-link {
+  border: 2px solid #F8F8F80A;
+  background-color: #003466;
+  text-decoration: none;
+  color: white;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 25px;
+  padding: 8px 16px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.nav-text {
+  position: relative;
+}
+
+/* Выпадающее меню для мероприятий */
+.events-submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 12px 0;
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.nav-item:hover .events-submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.submenu-link {
+  display: block;
+  padding: 10px 20px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.submenu-link:hover {
+  background: #f5f5f5;
+  color: #667eea;
+  padding-left: 25px;
+}
+
+/* Кнопки действий */
+.header-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.icon-btn {
+  background-color: #003466;
+  border: 2px solid #F8F8F80A;
+  border-radius: 50px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.heart-btn {
+  padding: 10px 15px;
+    background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image:url(heart.png) ;
+}
+
+.lock-btn {
+  padding: 10px;
+    background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image:url(lock.png) ;
+}
+
+.profile-btn {
+  padding: 10px 20px;
+  gap: 8px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image:url(image.png?) ;
+}
+
+.icon {
+  font-size: 18px;
+}
+
+.profile-text {
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+/* Бейдж для сердечка */
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff4757;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
