@@ -1,0 +1,312 @@
+/* components/EventCard.css */
+@import url('./fonts.css'); 
+.event-card {
+  background: white;
+  border-radius: 25px;
+  padding: 25px;
+  box-shadow: 0px 0px 6px 2px rgba(0, 52, 102, 0.42);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #eaeaea;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.event-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: #003465;
+}
+
+.event-card.past-event {
+  opacity: 0.95;
+  background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+  border-color: #dee2e6;
+}
+
+/* Заголовок и дата/место в одной строке */
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.event-title {
+  font-size: 38px;
+  font-weight: 700;
+  color: #003465;
+  margin: 0;
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Дата и место в правом верхнем углу */
+.event-details-header {
+      display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 8px;
+    min-width: 200px;
+    text-align: right;
+}
+
+.event-date-header,
+.event-location-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 30px;
+  color: rgba(0, 52, 102, 1);
+  line-height: 1.4;
+  justify-content: flex-end;
+}
+
+.event-date-header .icon,
+.event-location-header .icon {
+    width: 30px;
+    height: 30px;
+  flex-shrink: 0;
+  color: rgba(0, 52, 102, 1);
+}
+
+/* Основное содержимое карточки */
+.event-content {
+  gap: 30px;
+  margin: 10px 0;
+}
+
+.event-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  min-width: 250px;
+}
+
+.event-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.event-meta-label {
+  font-size: 13px;
+  color: #6c757d;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.event-meta-value {
+  font-size: 16px;
+  color: #003465;
+  font-weight: 500;
+}
+
+.event-description {
+  color: #495057;
+  line-height: 1.7;
+  font-size: 16px;
+  padding-right: 10px;
+}
+
+.event-description p {
+    font-size: 25px;
+    color: rgba(0, 52, 102, 1);
+  margin: 0;
+}
+
+/* Участники и действия в одной строке */
+.event-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eaeaea;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.event-participants {
+  flex: 1;
+  min-width: 250px;
+}
+
+.participants-progress {
+  height: 10px;
+  background: #e9ecef;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #28a745, #20c997);
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+.participants-count {
+  font-size: 14px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.event-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  padding: 10px 25px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #003465, #00509e);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #00274d, #003465);
+  box-shadow: 0 4px 15px rgba(0, 52, 101, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: white;
+  color: #003465;
+  border: 2px solid #003465;
+}
+
+.btn-secondary:hover {
+  background: #003465;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #6c757d;
+  border: 2px solid #6c757d;
+  cursor: default;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+  .event-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .event-meta {
+    min-width: auto;
+  }
+  
+  .event-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .event-participants {
+    min-width: auto;
+  }
+  
+  .event-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+  
+  .btn {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .event-card {
+    padding: 20px;
+  }
+  
+  .event-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .event-title {
+    font-size: 24px;
+    min-width: auto;
+  }
+  
+  .event-details-header {
+    align-items: flex-start;
+    text-align: left;
+    min-width: auto;
+  }
+  
+  .event-date-header,
+  .event-location-header {
+    justify-content: flex-start;
+  }
+  
+  .event-footer {
+    gap: 20px;
+  }
+  
+  .event-actions {
+    flex-direction: column;
+  }
+  
+  .btn {
+    min-width: auto;
+  }
+  
+  .event-date-header,
+  .event-location-header {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .event-card {
+    padding: 15px;
+  }
+  
+  .event-title {
+    font-size: 20px;
+  }
+  
+  .btn {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+  
+  .event-meta {
+    padding: 15px;
+  }
+}

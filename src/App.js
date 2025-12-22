@@ -1,17 +1,28 @@
 import './App.css';
 import Header from './component/Header';
-
+import Footer from './component/Footer';
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+ import EventsPage from './EventsPage'
+ import EventDetail from './EventDetail';
 function App() {
   return (
-    <div className="App">
-      <Header />
-      
-      <main className="main-content">
-        <h1>Добро пожаловать в XY Connections</h1>
-        <p>Здесь будет содержимое вашего сайта</p>
-        <p>Это заглушка - добавьте сюда ваш контент</p>
-      </main>
-    </div>
+    <Router>
+      <div className="App">
+        <Header />
+        
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<EventsPage />} />
+            <Route path="/events/past" element={<EventsPage />} />
+            <Route path="/events/upcoming" element={<EventsPage />} />
+            <Route path="/event/:id" element={<EventDetail />} />
+          </Routes>
+        </main>
+        
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

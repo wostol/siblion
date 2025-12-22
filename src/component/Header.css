@@ -1,16 +1,17 @@
 /* Header.css */
+@import url('../fonts.css'); 
 .header {
+  font-family: 'Kontora', sans-serif;
   background: white;
   color: white;
-  padding: 0 50px;
+  padding: 0 100px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  position: sticky;
+  /* position: sticky; */
   top: 0;
   z-index: 1000;
 }
 
 .header-container {
-  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -35,12 +36,13 @@
 }
 
 .logo-image {
-  height: 90px;
-  width: 90px;
+  height: 167px;
+  width: 167px;
 }
 
 /* Основная навигация */
 .main-nav {
+  padding-right: 20px;
   display: flex;
 }
 
@@ -48,7 +50,7 @@
   
   display: flex;
   list-style: none;
-  gap: 40px;
+  gap: 21px;
   margin: 0;
   padding: 0;
   align-items: center;
@@ -59,14 +61,12 @@
 }
 
 .nav-link {
-  border: 2px solid #F8F8F80A;
   background-color: #003466;
   text-decoration: none;
   color: white;
   font-style: normal;
   font-weight: 400;
   font-size: 25px;
-  line-height: 25px;
   padding: 8px 16px;
   border-radius: 25px;
   transition: all 0.3s ease;
@@ -76,129 +76,101 @@
   position: relative;
 }
 
-.nav-link:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
-}
 
+.nav-link:hover {
+  color: #ffffff;
+  background: rgba(23, 84, 161, 1);
+}
+.nav-link:focus {
+  outline: none;
+  color: #003466;
+  background: rgb(255, 255, 255);
+  box-shadow: 0px 0px 4px 2px #003466;
+} 
+.nav-link:active {
+  color: #003466;
+  background: rgb(255, 255, 255);
+  box-shadow: 0 4px 8px rgb(0, 37, 98);
+}
 .nav-text {
   position: relative;
-}
-
-/* Выпадающее меню для мероприятий */
-.events-submenu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  padding: 12px 0;
-  min-width: 200px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(10px);
-  transition: all 0.3s ease;
-  z-index: 100;
-}
-
-.nav-item:hover .events-submenu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.submenu-link {
-  display: block;
-  padding: 10px 20px;
-  color: #333;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 14px;
-  transition: all 0.2s ease;
-}
-
-.submenu-link:hover {
-  background: #f5f5f5;
-  color: #667eea;
-  padding-left: 25px;
 }
 
 /* Кнопки действий */
 .header-actions {
   display: flex;
-  gap: 15px;
+  gap: 21px;
   align-items: center;
 }
 
-.icon-btn {
-  background-color: #003466;
-  border: 2px solid #F8F8F80A;
-  border-radius: 50px;
-  color: white;
+.blue-btn {
+  background: #003466;
+  border: none;
+  border-radius: 25px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-
+  padding: 0;
   position: relative;
-  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
-.icon-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
+/* Кнопки без текста (иконки) */
+.blue-btn:not(.profile) {
+  width: 60px;
+  height: 58px;
 }
 
-.heart-btn {
-  padding: 10px 15px;
-    background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-image:url(heart.png) ;
+/* Wrapper для картинки с отступами от краев */
+.btn-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px; /* 12px отступ от краев кнопки */
+  border-radius: 8px;
 }
 
-.lock-btn {
-  padding: 10px;
-    background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-image:url(lock.png) ;
+/* Картинка внутри wrapper */
+.btn-img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
 }
 
-.profile-btn {
-  padding: 10px 20px;
-  gap: 8px;
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-image:url(image.png?) ;
-}
-
-.icon {
-  font-size: 18px;
-}
-
-.profile-text {
-  font-size: 14px;
-  font-weight: 600;
-  margin-left: 4px;
-}
-
-/* Бейдж для сердечка */
-.badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: #ff4757;
+/* Текст кнопки профиля */
+.btn-text {
   color: white;
-  font-size: 11px;
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.btn-badge {
+  position: absolute;
+  font-family: 'Kontora', sans-serif;
+  top: -6px;
+  right: -6px;
+  background: #ffffff;
+  color: rgba(0, 52, 102, 1);
+  font-size: 15px;
   font-weight: bold;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 2px solid rgba(0, 52, 102, 1);
+  z-index: 1;
+}
+.blue-btn:focus {
+  outline: none;
+  background: #ffffff;
+  border: 2px solid rgba(248, 248, 248, 0.04);
+  box-shadow: 0px 0px 4px 2px #003466;
+}
+
+.blue-btn:not(:focus):hover {
+  background: rgba(23, 84, 161, 1);
+  
 }

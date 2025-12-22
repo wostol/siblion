@@ -1,3 +1,5 @@
+@import url('./fonts.css'); 
+
 * {
   margin: 0;
   padding: 0;
@@ -5,9 +7,32 @@
 }
 
 body {
-  font-family: 'Arial', sans-serif;
+  position: relative;
+  font-family: 'Kontora', sans-serif;
   line-height: 1.6;
   color: #333;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Создаем псевдоэлемент для фонового лого */
+body::before {
+  content: '';
+  position: fixed; /* fixed вместо absolute для движения с прокруткой */
+  top: 50%;
+  left: 38%;
+  transform: translateY(-50%);
+  width: 110%;
+  height: 110%;
+  background: url('logosib.svg') no-repeat center;
+  background-size: cover;
+  /* opacity: 0.15; Полупрозрачный эффект */
+  z-index: -1; /* Отправляем на задний план */
+  pointer-events: none; /* Чтобы не мешало кликам */
+  
+  /* Анимация плавного движения при скролле */
+  will-change: transform;
+  transition: transform 0.3s ease;
 }
 
 .App {
@@ -36,4 +61,32 @@ a {
 /* Утилиты */
 .text-center {
   text-align: center;
+}
+.temp-content {
+  display: grid;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.temp-card {
+  background: linear-gradient(145deg, #1a1a2e, #16213e);
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.temp-card:hover {
+  transform: translateY(-5px);
+}
+
+.temp-card h2 {
+  color: #4cc9f0;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.temp-card p {
+  color: #b0b0b0;
+  text-align: left;
 }

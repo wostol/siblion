@@ -1,0 +1,30 @@
+@font-face {
+  font-family: 'Kontora';
+  src: local('Kontora'), 
+       url('../public/fonts/kontora/Kontora.woff') format('woff2'),
+       url('../public/fonts/kontora/Kontora.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Kontora';
+  src: local('Kontora'), 
+       url('../public/fonts/kontora/Kontora_bold.woff') format('woff2'),
+       url('../public/fonts/kontora/Kontora_bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Если есть другие начертания, добавьте их */
+@font-face {
+  font-family: 'Kontora';
+  src: local('Kontora'), 
+       url('../public/fonts/kontora/Kontora_thin.woff') format('woff2'),
+       url('../public/fonts/kontora/Kontora_thin.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
