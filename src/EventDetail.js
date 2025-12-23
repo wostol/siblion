@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import './EventDetail.css'
-
+import logo from './lionsib.svg'
 // Моковые данные для детальной страницы (в будущем из БД)
 const eventDetails = {
   3: {
@@ -137,6 +137,11 @@ const EventDetail = () => {
         {/* Заголовок */}
         <div className="event-detail-header">
           <h1 className="event-detail-title">{event.title}</h1>
+          <div className='logo'>
+                    <a href='/' className='logo-link'>
+                      <img src={logo} alt='XY Connections Logo' className='logo-image' />
+                    </a>
+            </div>
         </div>
 
         {/* Основное содержимое */}

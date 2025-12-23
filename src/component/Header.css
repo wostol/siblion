@@ -1,12 +1,12 @@
 /* Header.css */
 @import url('../fonts.css'); 
+
 .header {
   font-family: 'Kontora', sans-serif;
   background: white;
   color: white;
   padding: 0 100px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  /* position: sticky; */
   top: 0;
   z-index: 1000;
 }
@@ -27,17 +27,22 @@
   align-items: center;
 }
 
-.logo-text {
-  font-size: 28px;
-  font-weight: 800;
-  color: white;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
 .logo-image {
-  height: 167px;
-  width: 167px;
+  /* Минимальный и максимальный размер */
+  min-width: 60px;
+  max-width: 200px;
+  
+  /* Размер относительно ширины экрана */
+  width: 8.7vw; /* 167px / 1920px * 100 = 8.7% */
+  height: auto; /* Автоматическая высота для сохранения пропорций */
+  
+  /* Фиксированные размеры для экстремальных случаев */
+  min-height: 60px;
+  max-height: 200px;
+  
+  object-fit: contain;
+  transition: all 0.3s ease;
+
 }
 
 /* Основная навигация */
@@ -47,7 +52,6 @@
 }
 
 .nav-list {
-  
   display: flex;
   list-style: none;
   gap: 21px;
@@ -69,31 +73,36 @@
   font-size: 25px;
   padding: 8px 16px;
   border-radius: 25px;
-  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 8px;
   position: relative;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
 }
-
 
 .nav-link:hover {
   color: #ffffff;
   background: rgba(23, 84, 161, 1);
 }
+
+.nav-link.active {
+  background: white;
+  color: #003465;
+  box-shadow: 0px 0px 4px 2px #003466;
+}
+
+.nav-link:active {
+  background: white;
+  color: #003465;
+  box-shadow: 0px 0px 4px 2px #003466;
+}
+
 .nav-link:focus {
   outline: none;
-  color: #003466;
-  background: rgb(255, 255, 255);
+  background: white;
+  color: #003465;
   box-shadow: 0px 0px 4px 2px #003466;
-} 
-.nav-link:active {
-  color: #003466;
-  background: rgb(255, 255, 255);
-  box-shadow: 0 4px 8px rgb(0, 37, 98);
-}
-.nav-text {
-  position: relative;
 }
 
 /* Кнопки действий */
@@ -103,6 +112,23 @@
   align-items: center;
 }
 
+/* Ссылки для иконок */
+.heart-icon-link,
+.lock-icon-link,
+.profile-icon-link {
+  display: contents;
+  text-decoration: none;
+}
+
+/* Стили для активных ссылок иконок */
+.heart-icon-link.active .blue-btn,
+.lock-icon-link.active .blue-btn,
+.profile-icon-link.active .blue-btn {
+  background: white !important;
+  box-shadow: 0px 0px 4px 2px #003466 !important;
+}
+
+/* Общие стили для синих кнопок */
 .blue-btn {
   background: #003466;
   border: none;
@@ -114,12 +140,40 @@
   padding: 0;
   position: relative;
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  outline: none;
 }
 
-/* Кнопки без текста (иконки) */
+/* Кнопки иконок */
 .blue-btn:not(.profile) {
   width: 60px;
   height: 58px;
+}
+
+/* Ховер эффекты */
+.blue-btn:hover {
+  background: rgba(23, 84, 161, 1);
+}
+
+/* Активные кнопки (когда на своей странице) */
+.blue-btn.active {
+  background: white !important;
+  box-shadow: 0px 0px 4px 2px #003466 !important;
+}
+
+/* Состояние при нажатии (зажатии) */
+.blue-btn:active {
+  background: white !important;
+  box-shadow: 0px 0px 4px 2px #003466 !important;
+  transform: scale(0.98);
+}
+
+/* Состояние фокуса */
+.blue-btn:focus {
+  outline: none;
+  background: white !important;
+  box-shadow: 0px 0px 4px 2px #003466 !important;
 }
 
 /* Wrapper для картинки с отступами от краев */
@@ -127,7 +181,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px; /* 12px отступ от краев кнопки */
+  padding: 12px;
   border-radius: 8px;
 }
 
@@ -138,13 +192,7 @@
   object-fit: contain;
 }
 
-/* Текст кнопки профиля */
-.btn-text {
-  color: white;
-  font-weight: 600;
-  font-size: 15px;
-  white-space: nowrap;
-}
+/* Бейдж на кнопке профиля */
 .btn-badge {
   position: absolute;
   font-family: 'Kontora', sans-serif;
@@ -163,14 +211,20 @@
   border: 2px solid rgba(0, 52, 102, 1);
   z-index: 1;
 }
-.blue-btn:focus {
+
+/* Управление табиндексом для неактивных элементов */
+.nav-link[tabindex="-1"]:focus,
+.blue-btn[tabindex="-1"]:focus {
   outline: none;
-  background: #ffffff;
-  border: 2px solid rgba(248, 248, 248, 0.04);
-  box-shadow: 0px 0px 4px 2px #003466;
+  color: #ffffff;
+  background: #003466 !important;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
 }
 
-.blue-btn:not(:focus):hover {
-  background: rgba(23, 84, 161, 1);
-  
+.nav-link[tabindex="-1"]:active,
+.blue-btn[tabindex="-1"]:active {
+  background: #ffffff !important;
+  color: #003466;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
+  transform: none;
 }

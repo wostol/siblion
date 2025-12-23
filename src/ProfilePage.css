@@ -1,0 +1,272 @@
+/* ProfilePage.css */
+.profile-page {
+  font-family: 'Kontora';
+    margin: 0 36px;
+    padding: 40px 50px;
+    /* max-width: 1200px; */
+    margin: 0 auto;
+}
+
+.profile-header {
+  margin-bottom: 30px;
+}
+
+.profile-title {
+  font-family: 'Kontora';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 55px;
+  line-height: 72px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #003466;
+  margin: 0;
+}
+
+/* Карточка студента */
+.student-card {
+      display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 25px;
+    /* background: rgba(234, 236, 240, 1); */
+    border-radius: 20px;
+    border: 2px solid rgba(248, 248, 248, 0.04);
+    /* box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25); */
+    margin-bottom: 30px;
+}
+
+.student-avatar {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #003466, #007bff);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.student-info {
+  flex-grow: 1;
+}
+
+.student-name {
+  font-family: 'Kontora';
+  font-size: 32px;
+  font-weight: 600;
+  color: #003466;
+  margin: 0 0 8px 0;
+}
+
+.student-details {
+  font-family: 'Kontora';
+  font-size: 18px;
+  color: rgba(0, 52, 102, 0.75);
+  margin: 0;
+}
+
+/* Табы профиля */
+.profile-tabs {
+  padding-left: 11px;
+  display: flex;
+  gap: 16px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+/* Кнопки табов - используем те же стили, что и в EventsPage */
+.tab-btn {
+  font-family: 'Kontora';
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 30px;
+  border: 2px solid rgba(248, 248, 248, 0.04);
+  background: rgba(234, 236, 240, 1);
+  color: rgba(0, 52, 102, 0.45);
+  border-radius: 25px;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 180px;
+  justify-content: center;
+}
+
+.tab-btn:hover {
+  color: rgba(0, 52, 102, 1);
+}
+
+.tab-btn.active {
+  border: 2px solid rgba(248, 248, 248, 0.04);
+  box-shadow: 0px 0px 4px 2px #003466;
+  border-radius: 25px;
+  background: white;
+  color: #003465;
+}
+
+.tab-icon {
+  font-size: 18px;
+}
+
+/* Контент табов */
+.tab-content {
+        /* opacity: 0.6; */
+    border-radius: 20px;
+    padding: 30px;
+    border: 2px solid rgba(248, 248, 248, 0.04);
+    /* box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1); */
+}
+
+/* Уведомления */
+.no-content {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.no-content h3 {
+  color: #495057;
+  margin: 20px 0 10px 0;
+  font-size: 24px;
+}
+
+.no-content p {
+  color: #6c757d;
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Баллы */
+.points-card {
+  background: #f8f9fa;
+  border-radius: 15px;
+  padding: 25px;
+  border-left: 4px solid #003466;
+}
+
+.points-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.points-header h3 {
+  font-size: 24px;
+  color: #003466;
+  margin: 0;
+}
+
+.points-total {
+  font-size: 36px;
+  font-weight: bold;
+  color: #28a745;
+}
+
+.points-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.points-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.points-item.total {
+  border-top: 2px solid #003466;
+  border-bottom: none;
+  margin-top: 10px;
+  padding-top: 20px;
+  font-weight: bold;
+}
+
+.points-label {
+  color: #495057;
+}
+
+.points-value {
+  color: #003466;
+  font-weight: 600;
+}
+
+/* Прогресс бар */
+.points-progress {
+  margin-top: 30px;
+}
+
+.progress-bar {
+  height: 12px;
+  background: #e9ecef;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #003466, #007bff);
+  border-radius: 6px;
+}
+
+.progress-text {
+  color: #6c757d;
+  font-size: 14px;
+  text-align: center;
+  margin: 0;
+}
+
+/* Достижения */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.achievement-card {
+    opacity: 1;
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 15px;
+  padding: 25px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.achievement-card:hover {
+  border-color: #003466;
+  box-shadow: 0px 4px 12px rgba(0, 52, 102, 0.1);
+}
+
+.achievement-card.locked {
+  opacity: 0.6;
+  background: #f8f9fa;
+}
+
+.achievement-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.achievement-card h4 {
+  color: #003466;
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+.achievement-card p {
+  color: #6c757d;
+  margin: 0;
+  font-size: 14px;
+}

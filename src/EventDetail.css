@@ -28,21 +28,22 @@
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 6px;
-  color: #495057;
   font-size: 15px;
-  font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 30px;
+    font-family: 'Kontora';
+    border: 2px solid rgba(248, 248, 248, 0.04);
+    background: rgba(234, 236, 240, 1);
+    color: rgba(0, 52, 102, 0.45);
+    border-radius: 25px;
+    font-weight: 400;
+    justify-content: center;
+    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .back-btn:hover {
-  background: #e9ecef;
-  border-color: #003465;
-  color: #003465;
+    color: rgba(0, 52, 102, 1);
 }
 
 .event-detail-container {
@@ -53,14 +54,22 @@
 }
 
 .event-detail-header {
-  padding: 30px 40px;
-  background: linear-gradient(135deg, #003465, #00509e);
-  color: white;
+  display: flex;
+    padding: 30px 60px;
+    background: linear-gradient(135deg, #003465, #00509e);
+    color: white;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    align-items: center;
 }
 
 .event-detail-title {
-  font-size: 36px;
-  font-weight: 700;
+  font-family: Kontora;
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 65px;
+    line-height: 100%;
   margin: 0 0 15px 0;
 }
 

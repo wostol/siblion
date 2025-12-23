@@ -1,4 +1,5 @@
 .footer {
+    --footer-height: 414px;
   background-color: rgba(0, 52, 101, 1);
   color: #ffffff;
   padding: 40px 0 20px;

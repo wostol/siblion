@@ -16,24 +16,17 @@ body {
 }
 
 /* Создаем псевдоэлемент для фонового лого */
-body::before {
+/* body::before {
   content: '';
-  position: fixed; /* fixed вместо absolute для движения с прокруткой */
-  top: 50%;
-  left: 38%;
-  transform: translateY(-50%);
-  width: 110%;
-  height: 110%;
-  background: url('logosib.svg') no-repeat center;
-  background-size: cover;
-  /* opacity: 0.15; Полупрозрачный эффект */
-  z-index: -1; /* Отправляем на задний план */
-  pointer-events: none; /* Чтобы не мешало кликам */
-  
-  /* Анимация плавного движения при скролле */
-  will-change: transform;
-  transition: transform 0.3s ease;
-}
+  position: fixed;
+  bottom: 20px;
+  right: 20px; 
+  width: 50vh; 
+  height: 50vh; 
+  background: url('lionsib.svg') no-repeat center;
+  background-size: contain; 
+  pointer-events: none;
+} */
 
 .App {
   display: flex;

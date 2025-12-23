@@ -1,0 +1,20 @@
+/* BackgroundLogo.css */
+.background-logo {
+    content: '';
+    position: fixed;
+    right: -10vh;
+    top: calc(var(--header-height, 100px) + 50px);
+    bottom: calc(var(--footer-height, 300px) + 50px);
+    width: 50vh;
+    height: 50vh;
+    background: url(lionsib.svg) no-repeat;
+    background-size: contain;
+    background-position: right bottom;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 1;
+}
+
+body.no-background-logo {
+  background-image: none !important;
+}
