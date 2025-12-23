@@ -4,8 +4,7 @@
 .cart-page {
   font-family: 'Kontora';
   margin: 0 36px;
-  padding: 40px 20px;
-  max-width: 1200px;
+  padding: 40px 50px;
   margin: 0 auto;
 }
 
@@ -360,5 +359,101 @@
     width: 28px;
     height: 28px;
     font-size: 16px;
+  }
+}
+.cart-page.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.cart-page.loading .spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #e9ecef;
+  border-top-color: #003466;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+.cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.cart-item-image {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #003466 0%, #0056b3 100%);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.cart-item-image img {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+}
+
+.image-placeholder {
+  color: white;
+  font-size: 24px;
+}
+
+.cart-item-info {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.cart-item-total {
+  font-size: 18px;
+  font-weight: 600;
+  color: #003466;
+  margin: 10px 0;
+}
+
+.cart-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Анимация появления товаров */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cart-item {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Для темной темы */
+@media (prefers-color-scheme: dark) {
+  .cart-item-image {
+    background: linear-gradient(135deg, #0a2540 0%, #1a3c5f 100%);
+  }
+  
+  .cart-item-total {
+    color: #4a9eff;
+  }
+  
+  .clear-cart-btn {
+    background: #dc3545 !important;
   }
 }

@@ -22,7 +22,7 @@ const Footer = () => {
               <div className="footer-nav-links">
                 <a href="/" className="footer-nav-link">Мероприятия</a>
                 <a href="/profile" className="footer-nav-link">Личный кабинет</a>
-                <a href="#" className="footer-nav-link">Магазин</a>
+                <a href="/shop" className="footer-nav-link">Магазин</a>
               </div>
               <div className="contacts-wrapper">
               <span className="contacts-header">Контакты</span>

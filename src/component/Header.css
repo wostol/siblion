@@ -1,5 +1,5 @@
 /* Header.css */
-@import url('../fonts.css'); 
+@import url('../fonts.css');
 
 .header {
   font-family: 'Kontora', sans-serif;
@@ -28,18 +28,13 @@
 }
 
 .logo-image {
-  /* Минимальный и максимальный размер */
   min-width: 60px;
   max-width: 200px;
-  
-  /* Размер относительно ширины экрана */
-  width: 8.7vw; /* 167px / 1920px * 100 = 8.7% */
-  height: auto; /* Автоматическая высота для сохранения пропорций */
-  
-  /* Фиксированные размеры для экстремальных случаев */
+  width: 8.7vw;
+  height: auto;
   min-height: 60px;
   max-height: 200px;
-  
+
   object-fit: contain;
   transition: all 0.3s ease;
 

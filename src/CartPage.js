@@ -1,60 +1,95 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './CartPage.css';
 
 function CartPage() {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      title: "Футболка с логотипом ТОМА",
-      description: "Хлопковая футболка премиум качества",
-      price: 1499,
-      quantity: 1,
-      image: null
-    },
-    {
-      id: 2,
-      title: "Стикерпак",
-      description: "Набор стикеров для ноутбука",
-      price: 399,
-      quantity: 2,
-      image: null
-    },
-    {
-      id: 3,
-      title: "Кружка ТОМА",
-      description: "Керамическая кружка с логотипом",
-      price: 899,
-      quantity: 1,
-      image: null
-    }
-  ]);
-
+  const [cartItems, setCartItems] = useState([]);
   const [promoCode, setPromoCode] = useState('');
   const [discount, setDiscount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  // Расчет итоговой суммы
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const total = subtotal - discount;
+  // Загружаем данные из localStorage при монтировании компонента
+  useEffect(() => {
+    loadCartFromStorage();
+  }, []);
+
+  const loadCartFromStorage = () => {
+    try {
+      const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
+      setCartItems(savedCart);
+      updateHeaderBadge(savedCart.reduce((sum, item) => sum + (item.quantity || 1), 0));
+    } catch (error) {
+      console.error('Ошибка загрузки корзины:', error);
+      setCartItems([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateHeaderBadge = (count) => {
+    const badges = document.querySelectorAll('.cart-badge');
+    badges.forEach(badge => {
+      if (count > 0) {
+        badge.textContent = count > 99 ? '99+' : count;
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+    });
+  };
 
   const updateQuantity = (id, newQuantity) => {
-    if (newQuantity < 1) return;
+    if (newQuantity < 1) {
+      removeItem(id);
+      return;
+    }
     
-    setCartItems(items =>
-      items.map(item =>
+    setCartItems(items => {
+      const newItems = items.map(item =>
         item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
+      );
+      
+      // Сохраняем в localStorage
+      localStorage.setItem('cart', JSON.stringify(newItems));
+      
+      // Обновляем бейдж
+      const totalItems = newItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      updateHeaderBadge(totalItems);
+      
+      return newItems;
+    });
   };
 
   const removeItem = (id) => {
-    setCartItems(items => items.filter(item => item.id !== id));
+    setCartItems(items => {
+      const newItems = items.filter(item => item.id !== id);
+      // Сохраняем в localStorage
+      localStorage.setItem('cart', JSON.stringify(newItems));
+      
+      // Обновляем бейдж
+      const totalItems = newItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      updateHeaderBadge(totalItems);
+      
+      return newItems;
+    });
+  };
+
+  const clearCart = () => {
+    if (window.confirm('Вы уверены, что хотите очистить корзину?')) {
+      setCartItems([]);
+      localStorage.setItem('cart', '[]');
+      updateHeaderBadge(0);
+      alert('Корзина очищена');
+    }
   };
 
   const applyPromoCode = () => {
-    if (promoCode === 'TOMA2024') {
+    if (promoCode.toUpperCase() === 'TOMA2024') {
       setDiscount(500);
       alert('Промокод применен! Скидка 500₽');
+    } else if (promoCode.toUpperCase() === 'BONUS100') {
+      setDiscount(100);
+      alert('Промокод применен! Скидка 100₽');
     } else if (promoCode) {
       alert('Промокод недействителен');
     }
@@ -66,14 +101,38 @@ function CartPage() {
       alert('Корзина пуста');
       return;
     }
-    alert(`Заказ оформлен на сумму ${total}₽`);
-    // Здесь будет логика оформления заказа
+    
+    // Расчет баллов за заказ
+    const totalPoints = cartItems.reduce((sum, item) => 
+      sum + ((item.points || 0) * (item.quantity || 1)), 0);
+    
+    alert(`Заказ оформлен на сумму ${total}₽!\nВы получите ${totalPoints} баллов за покупку.`);
+    
+    // Очищаем корзину после оформления
+    setCartItems([]);
+    localStorage.setItem('cart', '[]');
+    updateHeaderBadge(0);
+    setDiscount(0);
   };
+
+  // Расчет итоговой суммы
+  const subtotal = cartItems.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0);
+  const total = Math.max(0, subtotal - discount);
+
+  if (loading) {
+    return (
+      <div className="cart-page loading">
+        <div className="spinner"></div>
+        <p>Загрузка корзины...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="cart-page">
       <header className="cart-header">
         <h1 className="cart-title">Корзина</h1>
+       
       </header>
 
       {cartItems.length === 0 ? (
@@ -95,31 +154,48 @@ function CartPage() {
               <div key={item.id} className="cart-item">
                 <div className="cart-item-image">
                   {item.image ? (
-                    <img src={item.image} alt={item.title} />
+                    <img src={item.image} alt={item.name || item.title} />
                   ) : (
-                    <span>🛒</span>
+                    <div className="image-placeholder">
+                      <span>🛒</span>
+                    </div>
                   )}
                 </div>
                 <div className="cart-item-details">
-                  <h3 className="cart-item-title">{item.title}</h3>
+                  <h3 className="cart-item-title">{item.name || item.title}</h3>
                   <p className="cart-item-description">{item.description}</p>
-                  <div className="cart-item-price">{item.price}₽</div>
+                  <div className="cart-item-info">
+                    <div className="cart-item-price">{item.price}₽</div>
+                    {item.points && (
+                      <div className="cart-item-points" style={{
+                        color: '#28a745',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        marginTop: '4px'
+                      }}>
+                        +{item.points} баллов
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="cart-item-actions">
                   <div className="cart-quantity">
                     <button 
                       className="quantity-btn"
-                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                      onClick={() => updateQuantity(item.id, (item.quantity || 1) - 1)}
                     >
                       -
                     </button>
-                    <span className="quantity-value">{item.quantity}</span>
+                    <span className="quantity-value">{item.quantity || 1}</span>
                     <button 
                       className="quantity-btn"
-                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      onClick={() => updateQuantity(item.id, (item.quantity || 1) + 1)}
                     >
                       +
                     </button>
+                  </div>
+                  <div className="cart-item-total">
+                    {(item.price || 0) * (item.quantity || 1)}₽
                   </div>
                   <button 
                     className="remove-btn"
@@ -137,7 +213,7 @@ function CartPage() {
             <h2>Итого</h2>
             
             <div className="cart-summary-item">
-              <span className="summary-label">Товары ({cartItems.length})</span>
+              <span className="summary-label">Товары ({cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0)} шт.)</span>
               <span className="summary-value">{subtotal}₽</span>
             </div>
             
@@ -154,6 +230,14 @@ function CartPage() {
                 </span>
               </div>
             )}
+
+            {/* Бонусные баллы за заказ */}
+            <div className="cart-summary-item">
+              <span className="summary-label">Баллы за заказ</span>
+              <span className="summary-value" style={{color: '#28a745'}}>
+                +{cartItems.reduce((sum, item) => sum + ((item.points || 0) * (item.quantity || 1)), 0)} баллов
+              </span>
+            </div>
             
             <div className="cart-summary-item">
               <span className="summary-label summary-total">К оплате</span>
@@ -164,7 +248,7 @@ function CartPage() {
               <input
                 type="text"
                 className="promo-input"
-                placeholder="Промокод"
+                placeholder="Промокод (например: TOMA2024)"
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && applyPromoCode()}
@@ -173,7 +257,7 @@ function CartPage() {
                 className="apply-promo-btn"
                 onClick={applyPromoCode}
               >
-                Применить промокод
+                Применить
               </button>
             </div>
 
@@ -185,9 +269,11 @@ function CartPage() {
               Перейти к оплате
             </button>
 
-            <Link to="/shop" className="continue-shopping">
-              ← Продолжить покупки
-            </Link>
+            <div className="cart-actions">
+              <Link to="/shop" className="continue-shopping">
+                ← Продолжить покупки
+              </Link>
+            </div>
           </div>
         </div>
       )}

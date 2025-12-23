@@ -8,8 +8,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
  import EventDetail from './EventDetail'
  import ProfilePage from './ProfilePage';
  import FavoritesPage from './FavoritesPage'; // Создайте этот компонент
-import SecurityPage from './CartPage'; // Создайте этот компонент
+import CartPage from './CartPage'; // Создайте этот компонент
  import BackgroundLogo from './BackgroundLogo';
+ import ShopPage from './ShopPage';
 function App() {
 
   return (
@@ -25,7 +26,8 @@ function App() {
             <Route path="/event/:id" element={<EventDetail />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/favorites" element={<FavoritesPage />} />
-            <Route path="/security" element={<SecurityPage />} />
+            <Route path="/cart" element={<CartPage/>} />
+            <Route path="/shop" element={<ShopPage />} /> {/* Добавьте этот маршрут */}
           </Routes>
         </main>
         

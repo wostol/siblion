@@ -12,12 +12,45 @@ import lockIconActive from './lock-hover.png';
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [cartItemsCount, setCartItemsCount] = useState(0);
 
   const [buttonStates, setButtonStates] = useState({
     heart: { hover: false, focus: false },
     lock: { hover: false, focus: false },
     profile: { hover: false, focus: false }
   });
+
+  // Загружаем количество товаров в корзине
+  useEffect(() => {
+    const updateCartCount = () => {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      setCartItemsCount(totalItems);
+    };
+
+    updateCartCount();
+    
+    // Слушаем изменения в localStorage
+    const handleStorageChange = (e) => {
+      if (e.key === 'cart') {
+        updateCartCount();
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Также обновляем при фокусе окна
+    window.addEventListener('focus', updateCartCount);
+    
+    // Периодически проверяем (на случай изменений в других вкладках)
+    const interval = setInterval(updateCartCount, 1000);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('focus', updateCartCount);
+      clearInterval(interval);
+    };
+  }, []);
 
   // Функция для обновления состояния кнопки
   const updateButtonState = (button, updates) => {
@@ -31,6 +64,7 @@ const Header = () => {
   const heartButtonRef = useRef(null);
   const lockButtonRef = useRef(null);
   const profileButtonRef = useRef(null);
+  const shopLinkRef = useRef(null);
 
   useEffect(() => {
     // Устанавливаем фокус на активной ссылке в зависимости от текущего пути
@@ -45,8 +79,10 @@ const Header = () => {
         activeRef = profileButtonRef;
       } else if (location.pathname === '/favorites') {
         activeRef = heartButtonRef;
-      } else if (location.pathname === '/security') {
+      } else if (location.pathname === '/cart') {
         activeRef = lockButtonRef;
+      } else if (location.pathname === '/shop') {
+        activeRef = shopLinkRef;
       }
 
       if (activeRef?.current) {
@@ -73,7 +109,7 @@ const Header = () => {
     // Определяем, активна ли кнопка (находимся на соответствующей странице)
     const isActive = () => {
       if (button === 'heart') return location.pathname === '/favorites';
-      if (button === 'lock') return location.pathname === '/security';
+      if (button === 'lock') return location.pathname === '/cart';
       if (button === 'profile') return location.pathname === '/profile';
       return false;
     };
@@ -103,9 +139,9 @@ const Header = () => {
     navigate('/favorites');
   };
 
-  // Обработчик клика по замку
-  const handleLockClick = () => {
-    navigate('/security');
+  // Обработчик клика по корзине
+  const handleCartClick = () => {
+    navigate('/cart');
   };
 
   // Обработчик клика по профилю
@@ -119,6 +155,30 @@ const Header = () => {
     e.preventDefault();
     navigate('/');
   };
+
+  // Обработчик клика по магазину
+  const handleShopClick = (e) => {
+    e.preventDefault();
+    navigate('/shop');
+  };
+
+  // Функция для обновления бейджа в header
+  const updateHeaderBadge = (count) => {
+    const badges = document.querySelectorAll('.cart-badge');
+    badges.forEach(badge => {
+      if (count > 0) {
+        badge.textContent = count > 99 ? '99+' : count;
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+    });
+  };
+
+  // Обновляем бейдж при изменении cartItemsCount
+  useEffect(() => {
+    updateHeaderBadge(cartItemsCount);
+  }, [cartItemsCount]);
 
   return (
     <header className='header'>
@@ -143,15 +203,21 @@ const Header = () => {
                 <span className="nav-text">Мероприятия</span>
               </Link>
             </li>
+            
+            {/* Магазин */}
             <li className='nav-item'>
-              <a 
-                href='#' 
-                className='nav-link'
-                tabIndex={-1}
+              <Link 
+                to="/shop" 
+                className={`nav-link ${location.pathname === '/shop' ? 'active' : ''}`}
+                ref={shopLinkRef}
+                tabIndex={location.pathname === '/shop' ? 0 : -1}
+                onClick={handleShopClick}
+                onKeyDown={(e) => handleKeyDown(e, () => navigate('/shop'))}
               >
-                Магазин
-              </a>
+                <span className="nav-text">Магазин</span>
+              </Link>
             </li>
+            
             <div className="header-actions">
               {/* Кнопка с сердечком */}
               <Link 
@@ -181,30 +247,36 @@ const Header = () => {
                 </button>
               </Link>
 
-              {/* Кнопка с замком */}
+              {/* Кнопка с корзиной */}
               <Link 
-                to="/security" 
-                className={`lock-icon-link ${location.pathname === '/security' ? 'active' : ''}`}
+                to="/cart" 
+                className={`lock-icon-link ${location.pathname === '/cart' ? 'active' : ''}`}
                 style={{display: 'contents'}}
               >
                 <button 
                   ref={lockButtonRef}
-                  className={`blue-btn ${location.pathname === '/security' ? 'active' : ''}`}
-                  aria-label="Безопасность"
-                  tabIndex={location.pathname === '/security' ? 0 : -1}
-                  onClick={handleLockClick}
+                  className={`blue-btn ${location.pathname === '/cart' ? 'active' : ''}`}
+                  aria-label="Корзина"
+                  tabIndex={location.pathname === '/cart' ? 0 : -1}
+                  onClick={handleCartClick}
                   onMouseEnter={() => updateButtonState('lock', { hover: true })}
                   onMouseLeave={() => updateButtonState('lock', { hover: false })}
                   onFocus={() => updateButtonState('lock', { focus: true })}
                   onBlur={() => updateButtonState('lock', { focus: false, hover: false })}
-                  onKeyDown={(e) => handleKeyDown(e, handleLockClick)}
+                  onKeyDown={(e) => handleKeyDown(e, handleCartClick)}
                 >
                   <span className="btn-icon-wrapper">
                     <img 
                       src={getIcon('lock')} 
-                      alt="Безопасность" 
+                      alt="Корзина" 
                       className="btn-img" 
                     />
+                  </span>
+                  {/* Бейдж с количеством товаров */}
+                  <span className="btn-badge cart-badge" style={{ 
+                    display: cartItemsCount > 0 ? 'flex' : 'none'
+                  }}>
+                    {cartItemsCount > 99 ? '99+' : cartItemsCount}
                   </span>
                 </button>
               </Link>

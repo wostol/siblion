@@ -9,7 +9,7 @@ const BackgroundLogo = () => {
   const [showLogo, setShowLogo] = useState(false);
 
   // Страницы, на которых должен отображаться логотип
-  const pagesWithLogo = ['/', '/events/past', '/events/upcoming', '/profile'];
+  const pagesWithLogo = ['/', '/events/past', '/events/upcoming', '/profile','/shop'];
   // Страницы без логотипа
   const pagesWithoutLogo = ['/favorites', '/security'];
 
