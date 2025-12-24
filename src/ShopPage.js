@@ -1,5 +1,5 @@
 // ShopPage.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './ShopPage.css';
 import Shirt from './shirt.png'
 import cap from './cap.png'
@@ -7,8 +7,6 @@ import pen from './pen.png'
 const ShopPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cartCount, setCartCount] = useState(0);
-
   // Моковые данные товаров с изображениями
   const mockProducts = [
     {
@@ -51,9 +49,19 @@ const ShopPage = () => {
   const updateCartCount = () => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-    setCartCount(totalItems);
+      updateHeaderBadge(totalItems);
   };
-
+   const updateHeaderBadge = (count) => {
+    const badges = document.querySelectorAll('.cart-badge');
+    badges.forEach(badge => {
+      if (count > 0) {
+        badge.textContent = count > 99 ? '99+' : count;
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+    });
+  };
   const addToCart = (product) => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const existingItem = cart.find(item => item.id === product.id);
@@ -97,8 +105,6 @@ const ShopPage = () => {
             <div key={product.id} className="product-card">
               <div className="product-image">
                 <div className="image-placeholder">
-                  {/* Замените этот div на реальный <img> если у вас есть изображения */}
-                  {/* <div className="product-placeholder">{product.name}</div> */}
                   <img 
                     src={product.image} 
                     alt={product.name}

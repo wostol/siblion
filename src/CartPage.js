@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './CartPage.css';
 
@@ -10,10 +10,7 @@ function CartPage() {
 
   // Загружаем данные из localStorage при монтировании компонента
   useEffect(() => {
-    loadCartFromStorage();
-  }, []);
-
-  const loadCartFromStorage = () => {
+    const loadCartFromStorage = () => {
     try {
       const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
       setCartItems(savedCart);
@@ -26,6 +23,8 @@ function CartPage() {
     }
   };
 
+    loadCartFromStorage();
+  }, []);
   const updateHeaderBadge = (count) => {
     const badges = document.querySelectorAll('.cart-badge');
     badges.forEach(badge => {
@@ -74,14 +73,14 @@ function CartPage() {
     });
   };
 
-  const clearCart = () => {
-    if (window.confirm('Вы уверены, что хотите очистить корзину?')) {
-      setCartItems([]);
-      localStorage.setItem('cart', '[]');
-      updateHeaderBadge(0);
-      alert('Корзина очищена');
-    }
-  };
+  // const clearCart = () => {
+  //   if (window.confirm('Вы уверены, что хотите очистить корзину?')) {
+  //     setCartItems([]);
+  //     localStorage.setItem('cart', '[]');
+  //     updateHeaderBadge(0);
+  //     alert('Корзина очищена');
+  //   }
+  // };
 
   const applyPromoCode = () => {
     if (promoCode.toUpperCase() === 'TOMA2024') {

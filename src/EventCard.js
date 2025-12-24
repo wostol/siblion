@@ -1,5 +1,3 @@
-// components/EventCard.js (обновленная версия без бейджей)
-import React from 'react'
 import './EventCard.css'
 import { useNavigate } from 'react-router-dom'
 const EventCard = ({ event, isPast = false }) => {
@@ -8,10 +6,9 @@ const EventCard = ({ event, isPast = false }) => {
     title, 
     date, 
     location, 
-    description, 
-    category,
-    maxParticipants,
-    currentParticipants
+    description
+    // maxParticipants,
+    // currentParticipants
   } = event;
     const navigate = useNavigate();
 
@@ -34,40 +31,40 @@ const EventCard = ({ event, isPast = false }) => {
   };
 
   // Форматирование времени (если нужно)
-  const formatTime = (dateString) => {
-    const dateObj = new Date(dateString);
-    return dateObj.toLocaleTimeString('ru-RU', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
+  // const formatTime = (dateString) => {
+  //   const dateObj = new Date(dateString);
+  //   return dateObj.toLocaleTimeString('ru-RU', {
+  //     hour: '2-digit',
+  //     minute: '2-digit'
+  //   });
+  // };
 
   // Проверка набора участников
-  const getParticipantsInfo = () => {
-    if (isPast) return null;
+  // const getParticipantsInfo = () => {
+  //   if (isPast) return null;
     
-    const isFull = currentParticipants >= maxParticipants;
-    const spotsLeft = maxParticipants - currentParticipants;
-    const percentage = (currentParticipants / maxParticipants) * 100;
+  //   const isFull = currentParticipants >= maxParticipants;
+  //   const spotsLeft = maxParticipants - currentParticipants;
+  //   const percentage = (currentParticipants / maxParticipants) * 100;
     
-    return (
-      <div className="event-participants">
-        <div className="participants-progress">
-          <div 
-            className="progress-bar" 
-            style={{ width: `${percentage}%` }}
-          ></div>
-        </div>
-        <span className="participants-count">
-          {isFull ? 'Мест нет' : `Осталось мест: ${spotsLeft}`}
-          {!isFull && ` (${currentParticipants}/${maxParticipants})`}
-        </span>
-      </div>
-    );
-  };
+  //   return (
+  //     <div className="event-participants">
+  //       <div className="participants-progress">
+  //         <div 
+  //           className="progress-bar" 
+  //           style={{ width: `${percentage}%` }}
+  //         ></div>
+  //       </div>
+  //       <span className="participants-count">
+  //         {isFull ? 'Мест нет' : `Осталось мест: ${spotsLeft}`}
+  //         {!isFull && ` (${currentParticipants}/${maxParticipants})`}
+  //       </span>
+  //     </div>
+  //   );
+  // };
 
   // Проверка, можно ли записаться
-  const canRegister = !isPast && currentParticipants < maxParticipants;
+  // const canRegister = !isPast && currentParticipants < maxParticipants;
 
   return (
     

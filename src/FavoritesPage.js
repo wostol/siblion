@@ -1,11 +1,9 @@
 // FavoritesPage.jsx
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import './FavoritesPage.css';
 
 function FavoritesPage() {
   const [activeTab, setActiveTab] = useState('events');
-  const [isLoading, setIsLoading] = useState(false);
-
   return (
     <div className="favorites-page">
       <header className="favorites-header">
@@ -20,41 +18,22 @@ function FavoritesPage() {
         >
           Мероприятия
         </button>
-        {/* <button
-          className={`favorites-tab-btn ${activeTab === 'materials' ? 'active' : ''}`}
-          onClick={() => setActiveTab('materials')}
-        >
-          Материалы
-        </button>
-        <button
-          className={`favorites-tab-btn ${activeTab === 'notes' ? 'active' : ''}`}
-          onClick={() => setActiveTab('notes')}
-        >
-          Заметки
-        </button> */}
       </div>
 
       <div className="favorites-content">
-        {isLoading ? (
-          <div className="loading-container">
-            <div className="spinner"></div>
-            <p>Загрузка избранного...</p>
-          </div>
-        ) : (
-          <div className="empty-favorites">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="#6c757d">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-            </svg>
-            <h3>Избранное пусто</h3>
-            <p>
-              {activeTab === 'events' 
-                ? 'Добавляйте мероприятия в избранное, чтобы быстро находить их позже'
-                : activeTab === 'materials'
-                ? 'Сохраняйте полезные материалы для изучения'
-                : 'Создавайте заметки для важной информации'}
-            </p>
-          </div>
-        )}
+        <div className="empty-favorites">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="#6c757d">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+          <h3>Избранное пусто</h3>
+          <p>
+            {activeTab === 'events' 
+              ? 'Добавляйте мероприятия в избранное, чтобы быстро находить их позже'
+              : activeTab === 'materials'
+              ? 'Сохраняйте полезные материалы для изучения'
+              : 'Создавайте заметки для важной информации'}
+          </p>
+        </div>
       </div>
     </div>
   );

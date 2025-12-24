@@ -1,5 +1,5 @@
 ﻿
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import EventCard from './EventCard'
 import './EventsPage.css'
 
