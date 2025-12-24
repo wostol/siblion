@@ -1,8 +1,6 @@
 import './App.css';
 import Header from './component/Header';
 import Footer from './component/Footer';
-import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
  import EventsPage from './EventsPage'
  import EventDetail from './EventDetail'

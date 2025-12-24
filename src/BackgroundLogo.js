@@ -58,7 +58,7 @@ const BackgroundLogo = () => {
     };
 
     setShowLogo(shouldShowLogo());
-  }, [location.pathname]);
+  }, [location.pathname, pagesWithLogo,pagesWithoutLogo]);
 
   // Управляем классом на body
   useEffect(() => {
