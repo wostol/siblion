@@ -9,11 +9,6 @@ function ProfilePage() {
       <header className="profile-header">
         <h1 className="profile-title">Личный кабинет</h1>
       </header>
-
-      {/* Информация о студенте */}
-      
-
-      {/* Переключатель вкладок */}
       <div className="profile-tabs">
         <button
           className={`tab-btn ${activeTab === 'notifications' ? 'active' : ''}`}

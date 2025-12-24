@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import './BackgroundLogo.css';
 
@@ -8,10 +8,16 @@ const BackgroundLogo = () => {
   const [footerHeight, setFooterHeight] = useState(100);
   const [showLogo, setShowLogo] = useState(false);
 
-  // Страницы, на которых должен отображаться логотип
-  const pagesWithLogo = ['/', '/events/past', '/events/upcoming', '/profile','/shop'];
-  // Страницы без логотипа
-  const pagesWithoutLogo = ['/favorites', '/security'];
+  // Используем useMemo для мемоизации массивов
+  const pagesWithLogo = useMemo(() => 
+    ['/', '/events/past', '/events/upcoming', '/profile', '/shop'], 
+    []
+  );
+
+  const pagesWithoutLogo = useMemo(() => 
+    ['/favorites', '/security'], 
+    []
+  );
 
   // Получаем высоту header и footer
   useEffect(() => {
@@ -35,7 +41,7 @@ const BackgroundLogo = () => {
     };
   }, []);
 
-  // Определяем, нужно ли показывать логотип
+  // Определяем, показывать ли логотип
   useEffect(() => {
     const shouldShowLogo = () => {
       const path = location.pathname;
@@ -58,9 +64,9 @@ const BackgroundLogo = () => {
     };
 
     setShowLogo(shouldShowLogo());
-  }, [location.pathname, pagesWithLogo,pagesWithoutLogo]);
+  }, [location.pathname, pagesWithLogo, pagesWithoutLogo]); // Добавляем массивы в зависимости
 
-  // Управляем классом на body
+  // Добавляем/удаляем CSS класс
   useEffect(() => {
     if (!showLogo) {
       document.body.classList.add('no-background-logo');
