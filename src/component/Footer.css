@@ -1,15 +1,15 @@
 .footer {
   --footer-height: 414px;
+  width: 100%;
   background-color: rgba(0, 52, 101, 1);
   color: #ffffff;
   padding: 40px 0 20px;
-  border-top: 1px solid #2d2d44;
 }
 
 .footer-container {
   margin: 0 auto;
-  max-width: 1200px;
-  padding: 0 20px;
+  width: 100%;
+  max-width: 80rem;
 }
 
 /* Основное содержимое */
@@ -19,7 +19,6 @@
   align-items: flex-start;
   margin-bottom: 30px;
   padding-bottom: 30px;
-  border-bottom: 1px solid #2d2d44;
 }
 
 /* Левая колонка с лого */

@@ -3,11 +3,10 @@
 
 .shop-page {
   font-family: 'Kontora';
-  margin: 0 36px;
-  padding: 40px 50px;
   margin: 0 auto;
-  min-height: 100vh;
   position: relative;
+  width: 100%;
+   max-width: 80rem;
 }
 
 /* Заголовок */

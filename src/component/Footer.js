@@ -45,8 +45,6 @@ const Footer = () => {
             
           </div>
         </div>
-
-        {/* Соцсеть (отдельно под основной строкой) */}
         <div className="footer-social">
           <a href="https://vk.com/sib_lions" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="ВКонтакте" >
             <img 
@@ -56,8 +54,6 @@ const Footer = () => {
             />
           </a>
         </div>
-
-        {/* Нижняя часть с копирайтом */}
         <div className="footer-bottom">
           <p className="copyright">
             © {currentYear} Национальный исследовательский Томский политехнический университет

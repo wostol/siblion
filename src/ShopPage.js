@@ -13,7 +13,7 @@ const ShopPage = () => {
       id: 1,
       name: 'Футболка',
       description: 'Хлопковая футболка с логотипом',
-      price: 1499,
+      price: 150,
       image: Shirt, // Предполагаем, что изображение лежит в папке public/images
       points: 150 // Баллы за покупку
     },
@@ -21,7 +21,7 @@ const ShopPage = () => {
       id: 2,
       name: 'Кружка',
       description: 'Керамическая кружка 350мл',
-      price: 899,
+      price: 90,
       image: cap,
       points: 90
     },
@@ -29,7 +29,7 @@ const ShopPage = () => {
       id: 3,
       name: 'Ручка',
       description: 'Ручка с логотипом',
-      price: 399,
+      price: 40,
       image: pen,
       points: 40
     }
@@ -77,9 +77,6 @@ const ShopPage = () => {
     
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
-    
-    // Уведомление
-    alert(`${product.name} добавлен в корзину!`);
   };
 
   if (loading) {

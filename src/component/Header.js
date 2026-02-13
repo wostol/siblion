@@ -13,12 +13,28 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [cartItemsCount, setCartItemsCount] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const [buttonStates, setButtonStates] = useState({
     heart: { hover: false, focus: false },
     lock: { hover: false, focus: false },
     profile: { hover: false, focus: false }
   });
+
+  // Проверка на мобильное устройство
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      // Закрываем меню при переходе на десктоп
+      if (window.innerWidth > 768) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Загружаем количество товаров в корзине
   useEffect(() => {
@@ -51,6 +67,11 @@ const Header = () => {
       clearInterval(interval);
     };
   }, []);
+
+  // Закрываем меню при смене пути
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
 
   // Функция для обновления состояния кнопки
   const updateButtonState = (button, updates) => {
@@ -137,29 +158,34 @@ const Header = () => {
   // Обработчик клика по сердечку
   const handleHeartClick = () => {
     navigate('/favorites');
+    setIsMenuOpen(false);
   };
 
   // Обработчик клика по корзине
   const handleCartClick = () => {
     navigate('/cart');
+    setIsMenuOpen(false);
   };
 
   // Обработчик клика по профилю
   const handleProfileClick = (e) => {
     e.preventDefault();
     navigate('/profile');
+    setIsMenuOpen(false);
   };
 
   // Обработчик клика по мероприятиям
   const handleEventsClick = (e) => {
     e.preventDefault();
     navigate('/');
+    setIsMenuOpen(false);
   };
 
   // Обработчик клика по магазину
   const handleShopClick = (e) => {
     e.preventDefault();
     navigate('/shop');
+    setIsMenuOpen(false);
   };
 
   // Функция для обновления бейджа в header
@@ -180,16 +206,48 @@ const Header = () => {
     updateHeaderBadge(cartItemsCount);
   }, [cartItemsCount]);
 
+  // Блокируем прокрутку при открытом меню
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
+
+  // Обработчик клика по бургеру
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <header className='header'>
       <div className='header-container'>
         <div className='logo'>
-          <a href='/' className='logo-link'>
+          <a href='/' className='logo-link' onClick={handleEventsClick}>
             <img src={logo} alt='Connections Logo' className='logo-image' />
           </a>
         </div>
 
-        <nav className='main-nav'>
+        {/* Бургер-иконка для мобильной версии */}
+        {isMobile && (
+          <button 
+            className={`burger-menu ${isMenuOpen ? 'open' : ''}`}
+            onClick={toggleMenu}
+            aria-label="Меню"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        )}
+
+        {/* Навигация */}
+        <nav className={`main-nav ${isMobile ? 'mobile-nav' : ''} ${isMenuOpen ? 'open' : ''}`}>
           <ul className='nav-list'>
             <li className='nav-item'>
               <Link 
@@ -312,6 +370,11 @@ const Header = () => {
             </div>
           </ul>
         </nav>
+
+        {/* Оверлей для мобильного меню */}
+        {isMobile && isMenuOpen && (
+          <div className="menu-overlay" onClick={() => setIsMenuOpen(false)} />
+        )}
       </div>
     </header>
   )

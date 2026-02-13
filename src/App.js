@@ -14,7 +14,6 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <BackgroundLogo /> {/* Добавляем компонент фона */}
         <Header />
         
         <main className="main-content">

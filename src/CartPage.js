@@ -4,27 +4,33 @@ import './CartPage.css';
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
-  const [promoCode, setPromoCode] = useState('');
-  const [discount, setDiscount] = useState(0);
+  const [userPoints, setUserPoints] = useState(1000); // Начальный баланс баллов пользователя
   const [loading, setLoading] = useState(true);
 
   // Загружаем данные из localStorage при монтировании компонента
   useEffect(() => {
     const loadCartFromStorage = () => {
-    try {
-      const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
-      setCartItems(savedCart);
-      updateHeaderBadge(savedCart.reduce((sum, item) => sum + (item.quantity || 1), 0));
-    } catch (error) {
-      console.error('Ошибка загрузки корзины:', error);
-      setCartItems([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
+        setCartItems(savedCart);
+        updateHeaderBadge(savedCart.reduce((sum, item) => sum + (item.quantity || 1), 0));
+        
+        // Загружаем баллы пользователя (в реальном приложении это бы приходило с сервера)
+        const savedPoints = localStorage.getItem('userPoints');
+        if (savedPoints) {
+          setUserPoints(parseInt(savedPoints));
+        }
+      } catch (error) {
+        console.error('Ошибка загрузки корзины:', error);
+        setCartItems([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     loadCartFromStorage();
   }, []);
+
   const updateHeaderBadge = (count) => {
     const badges = document.querySelectorAll('.cart-badge');
     badges.forEach(badge => {
@@ -48,10 +54,7 @@ function CartPage() {
         item.id === id ? { ...item, quantity: newQuantity } : item
       );
       
-      // Сохраняем в localStorage
       localStorage.setItem('cart', JSON.stringify(newItems));
-      
-      // Обновляем бейдж
       const totalItems = newItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
       updateHeaderBadge(totalItems);
       
@@ -62,37 +65,11 @@ function CartPage() {
   const removeItem = (id) => {
     setCartItems(items => {
       const newItems = items.filter(item => item.id !== id);
-      // Сохраняем в localStorage
       localStorage.setItem('cart', JSON.stringify(newItems));
-      
-      // Обновляем бейдж
       const totalItems = newItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
       updateHeaderBadge(totalItems);
-      
       return newItems;
     });
-  };
-
-  // const clearCart = () => {
-  //   if (window.confirm('Вы уверены, что хотите очистить корзину?')) {
-  //     setCartItems([]);
-  //     localStorage.setItem('cart', '[]');
-  //     updateHeaderBadge(0);
-  //     alert('Корзина очищена');
-  //   }
-  // };
-
-  const applyPromoCode = () => {
-    if (promoCode.toUpperCase() === 'TOMA2024') {
-      setDiscount(500);
-      alert('Промокод применен! Скидка 500₽');
-    } else if (promoCode.toUpperCase() === 'BONUS100') {
-      setDiscount(100);
-      alert('Промокод применен! Скидка 100₽');
-    } else if (promoCode) {
-      alert('Промокод недействителен');
-    }
-    setPromoCode('');
   };
 
   const handleCheckout = () => {
@@ -101,22 +78,36 @@ function CartPage() {
       return;
     }
     
-    // Расчет баллов за заказ
-    const totalPoints = cartItems.reduce((sum, item) => 
-      sum + ((item.points || 0) * (item.quantity || 1)), 0);
+    const totalPointsCost = cartItems.reduce((sum, item) => 
+      sum + ((item.pricePoints || item.price || 0) * (item.quantity || 1)), 0);
     
-    alert(`Заказ оформлен на сумму ${total}₽!\nВы получите ${totalPoints} баллов за покупку.`);
+    if (userPoints < totalPointsCost) {
+      const missingPoints = totalPointsCost - userPoints;
+      alert(`Недостаточно баллов!\nНужно: ${totalPointsCost} баллов\nУ вас: ${userPoints} баллов\nНе хватает: ${missingPoints} баллов`);
+      return;
+    }
     
-    // Очищаем корзину после оформления
-    setCartItems([]);
-    localStorage.setItem('cart', '[]');
-    updateHeaderBadge(0);
-    setDiscount(0);
+    // Подтверждение покупки
+    if (window.confirm(`Оплатить заказ на сумму ${totalPointsCost} баллов?\nПосле оплаты у вас останется: ${userPoints - totalPointsCost} баллов`)) {
+      // Списание баллов
+      const newPointsBalance = userPoints - totalPointsCost;
+      setUserPoints(newPointsBalance);
+      localStorage.setItem('userPoints', newPointsBalance.toString());
+      
+      // Очищаем корзину
+      setCartItems([]);
+      localStorage.setItem('cart', '[]');
+      updateHeaderBadge(0);
+      
+      alert(`Заказ успешно оформлен!\nСписано: ${totalPointsCost} баллов\nОстаток: ${newPointsBalance} баллов\nСпасибо за покупку!`);
+    }
   };
 
-  // Расчет итоговой суммы
-  const subtotal = cartItems.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0);
-  const total = Math.max(0, subtotal - discount);
+  // Расчет итоговой суммы в баллах
+  const totalPointsCost = cartItems.reduce((sum, item) => 
+    sum + ((item.pricePoints || item.price || 0) * (item.quantity || 1)), 0);
+
+  const canAfford = userPoints >= totalPointsCost;
 
   if (loading) {
     return (
@@ -131,7 +122,7 @@ function CartPage() {
     <div className="cart-page">
       <header className="cart-header">
         <h1 className="cart-title">Корзина</h1>
-       
+
       </header>
 
       {cartItems.length === 0 ? (
@@ -164,15 +155,20 @@ function CartPage() {
                   <h3 className="cart-item-title">{item.name || item.title}</h3>
                   <p className="cart-item-description">{item.description}</p>
                   <div className="cart-item-info">
-                    <div className="cart-item-price">{item.price}₽</div>
-                    {item.points && (
-                      <div className="cart-item-points" style={{
+                    <div className="cart-item-price">
+                      <span className="points-price">{(item.pricePoints || item.price || 0)} баллов</span>
+                      {item.originalPrice && (
+                        <span className="original-price">{item.originalPrice}₽</span>
+                      )}
+                    </div>
+                    {item.givesPoints && (
+                      <div className="cart-item-gives-points" style={{
                         color: '#28a745',
                         fontSize: '14px',
                         fontWeight: '600',
                         marginTop: '4px'
                       }}>
-                        +{item.points} баллов
+                        +{item.givesPoints} баллов за покупку
                       </div>
                     )}
                   </div>
@@ -194,7 +190,7 @@ function CartPage() {
                     </button>
                   </div>
                   <div className="cart-item-total">
-                    {(item.price || 0) * (item.quantity || 1)}₽
+                    {(item.pricePoints || item.price || 0) * (item.quantity || 1)} баллов
                   </div>
                   <button 
                     className="remove-btn"
@@ -213,7 +209,7 @@ function CartPage() {
             
             <div className="cart-summary-item">
               <span className="summary-label">Товары ({cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0)} шт.)</span>
-              <span className="summary-value">{subtotal}₽</span>
+              <span className="summary-value">{totalPointsCost} баллов</span>
             </div>
             
             <div className="cart-summary-item">
@@ -221,52 +217,50 @@ function CartPage() {
               <span className="summary-value">Бесплатно</span>
             </div>
             
-            {discount > 0 && (
+            <div className="cart-summary-item">
+              <span className="summary-label">Ваш баланс</span>
+              <span className="summary-value" style={{
+                color: userPoints >= totalPointsCost ? '#28a745' : '#dc3545',
+                fontWeight: '600'
+              }}>
+                {userPoints} баллов
+              </span>
+            </div>
+
+            {!canAfford && (
+              <div className="cart-summary-item error">
+                <span className="summary-label">Недостаточно баллов</span>
+                <span className="summary-value" style={{color: '#dc3545'}}>
+                  Не хватает: {totalPointsCost - userPoints} баллов
+                </span>
+              </div>
+            )}
+            
+            <div className="cart-summary-item">
+              <span className="summary-label summary-total">К оплате</span>
+              <span className="summary-value summary-total">{totalPointsCost} баллов</span>
+            </div>
+
+            {canAfford && (
               <div className="cart-summary-item">
-                <span className="summary-label">Скидка</span>
-                <span className="summary-value" style={{color: '#28a745'}}>
-                  -{discount}₽
+                <span className="summary-label">Останется после оплаты</span>
+                <span className="summary-value" style={{color: '#28a745', fontWeight: '600'}}>
+                  {userPoints - totalPointsCost} баллов
                 </span>
               </div>
             )}
 
-            {/* Бонусные баллы за заказ */}
-            <div className="cart-summary-item">
-              <span className="summary-label">Баллы за заказ</span>
-              <span className="summary-value" style={{color: '#28a745'}}>
-                +{cartItems.reduce((sum, item) => sum + ((item.points || 0) * (item.quantity || 1)), 0)} баллов
-              </span>
-            </div>
-            
-            <div className="cart-summary-item">
-              <span className="summary-label summary-total">К оплате</span>
-              <span className="summary-value summary-total">{total}₽</span>
-            </div>
-
-            <div className="promo-section">
-              <input
-                type="text"
-                className="promo-input"
-                placeholder="Промокод (например: TOMA2024)"
-                value={promoCode}
-                onChange={(e) => setPromoCode(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && applyPromoCode()}
-              />
-              <button 
-                className="apply-promo-btn"
-                onClick={applyPromoCode}
-              >
-                Применить
-              </button>
-            </div>
-
             <button 
-              className="checkout-btn"
+              className={`checkout-btn ${!canAfford ? 'disabled' : ''}`}
               onClick={handleCheckout}
+              disabled={!canAfford}
             >
-              <span>💳</span>
-              Перейти к оплате
+              {canAfford ? `Оплатить ${totalPointsCost} баллов` : 'Недостаточно баллов'}
             </button>
+
+            <div className="points-note">
+              <p>💡 Все товары приобретаются за баллы. Баллы можно заработать, выполняя задания и участвуя в активностях.</p>
+            </div>
 
             <div className="cart-actions">
               <Link to="/shop" className="continue-shopping">

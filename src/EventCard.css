@@ -28,14 +28,15 @@
   border-color: #dee2e6;
 }
 
-/* Заголовок и дата/место в одной строке */
+/* О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫/О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ */
 .event-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 5px;
-  flex-wrap: wrap;
-  gap: 20px;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-bottom: 5px;
+    flex-wrap: nowrap;
+    gap: 20px;
+    flex-direction: row;
 }
 
 .event-title {
@@ -47,7 +48,7 @@
   min-width: 300px;
 }
 
-/* Дата и место в правом верхнем углу */
+/* О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ */
 .event-details-header {
       display: flex;
     flex-direction: row;
@@ -62,7 +63,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 30px;
+  font-size: 20px;
   color: rgba(0, 52, 102, 1);
   line-height: 1.4;
   justify-content: flex-end;
@@ -76,7 +77,7 @@
   color: rgba(0, 52, 102, 1);
 }
 
-/* Основное содержимое карточки */
+/* О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ */
 .event-content {
   gap: 30px;
   margin: 10px 0;
@@ -125,7 +126,7 @@
   margin: 0;
 }
 
-/* Участники и действия в одной строке */
+/* О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ */
 .event-footer {
   display: flex;
   justify-content: space-between;
@@ -218,7 +219,7 @@
   cursor: not-allowed;
 }
 
-/* Адаптивность */
+/* О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ */
 @media (max-width: 992px) {
   .event-content {
     grid-template-columns: 1fr;
