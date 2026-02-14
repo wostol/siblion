@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/siblion/static/css/main.ed2d7971.css",
+    "main.js": "/siblion/static/js/main.6e4b28e9.js",
+    "static/js/453.fd2f0c4a.chunk.js": "/siblion/static/js/453.fd2f0c4a.chunk.js",
+    "static/media/lion.png": "/siblion/static/media/lion.050729e7d0edf38d05c7.png",
+    "static/media/lionsib.svg": "/siblion/static/media/lionsib.e2be176dadefada00c7d8acd774a2501.svg",
+    "static/media/Kontora.woff": "/siblion/static/media/Kontora.a1eaaf63c0d7704044cc.woff",
+    "static/media/Kontora_thin.woff": "/siblion/static/media/Kontora_thin.1e19c593169f06bed5f9.woff",
+    "static/media/Kontora_bold.woff": "/siblion/static/media/Kontora_bold.4b65cf9962fcd6cdf09a.woff",
+    "static/media/shirt.png": "/siblion/static/media/shirt.0e068aac640a2cb18b39.png",
+    "static/media/VK.png": "/siblion/static/media/VK.5f5baa5bf6cccc543647.png",
+    "static/media/cap.png": "/siblion/static/media/cap.5741d40deb04988ab999.png",
+    "static/media/pen.png": "/siblion/static/media/pen.d85fcc10ec86578e9ab1.png",
+    "index.html": "/siblion/index.html",
+    "main.ed2d7971.css.map": "/siblion/static/css/main.ed2d7971.css.map",
+    "main.6e4b28e9.js.map": "/siblion/static/js/main.6e4b28e9.js.map",
+    "453.fd2f0c4a.chunk.js.map": "/siblion/static/js/453.fd2f0c4a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ed2d7971.css",
+    "static/js/main.6e4b28e9.js"
+  ]
+}
