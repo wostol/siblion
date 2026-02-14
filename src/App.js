@@ -9,12 +9,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import CartPage from './CartPage'; // Создайте этот компонент
  import BackgroundLogo from './BackgroundLogo';
  import ShopPage from './ShopPage';
-  import AuthHandler from './AuthHandler';
+  // import AuthHandler from './AuthHandler';
 function App() {
 
   return (
     <Router>
-      <AuthHandler>
+      {/* <AuthHandler> */}
       <div className="App">
         <Header />
         
@@ -32,7 +32,7 @@ function App() {
         
         <Footer />
       </div>
-      </AuthHandler>
+      {/* </AuthHandler> */}
     </Router>
   );
 }
