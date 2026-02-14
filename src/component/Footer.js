@@ -9,14 +9,10 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-container">
-        {/* Основной контент в строку */}
         <div className="footer-content">
-          {/* Логотип (слева) */}
           <div className="footer-logo-container">
             <img src={logo} alt="XY Connections Logo" className="footer-logo" />
           </div>
-
-          {/* Контейнер для меню и контактов */}
           <div className="nav-contacts-container">
             <div className="footer-nav-container">
               <div className="footer-nav-links">
@@ -40,9 +36,6 @@ const Footer = () => {
               </div>
             </div>
             </div>
-
-            {/* Контакты под меню */}
-            
           </div>
         </div>
         <div className="footer-social">
