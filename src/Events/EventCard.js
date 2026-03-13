@@ -29,43 +29,6 @@ const EventCard = ({ event, isPast = false }) => {
       year: 'numeric'
     });
   };
-
-  // Форматирование времени (если нужно)
-  // const formatTime = (dateString) => {
-  //   const dateObj = new Date(dateString);
-  //   return dateObj.toLocaleTimeString('ru-RU', {
-  //     hour: '2-digit',
-  //     minute: '2-digit'
-  //   });
-  // };
-
-  // Проверка набора участников
-  // const getParticipantsInfo = () => {
-  //   if (isPast) return null;
-    
-  //   const isFull = currentParticipants >= maxParticipants;
-  //   const spotsLeft = maxParticipants - currentParticipants;
-  //   const percentage = (currentParticipants / maxParticipants) * 100;
-    
-  //   return (
-  //     <div className="event-participants">
-  //       <div className="participants-progress">
-  //         <div 
-  //           className="progress-bar" 
-  //           style={{ width: `${percentage}%` }}
-  //         ></div>
-  //       </div>
-  //       <span className="participants-count">
-  //         {isFull ? 'Мест нет' : `Осталось мест: ${spotsLeft}`}
-  //         {!isFull && ` (${currentParticipants}/${maxParticipants})`}
-  //       </span>
-  //     </div>
-  //   );
-  // };
-
-  // Проверка, можно ли записаться
-  // const canRegister = !isPast && currentParticipants < maxParticipants;
-
   return (
     
     <div 
@@ -81,11 +44,9 @@ const EventCard = ({ event, isPast = false }) => {
       }}
       aria-label={`Подробнее о мероприятии: ${title}`}
     >
-      {/* Заголовок и дата/место в правом углу */}
       <div className="event-header">
+        <div className="ag-courses-item_bg"></div>
         <h3 className="event-title">{title}</h3>
-        
-        {/* Дата и место в правом верхнем углу */}
         <div className="event-details-header">
           <div className="event-date-header">
             <svg className="icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">

@@ -30,16 +30,18 @@
   width: fit-content;
   height: 7rem;
 }
+
 .logo-link:focus {
   outline: none;                  
 }
+
 .logo-image {
-    width: 100%;
-    height: 100%;
-    -o-object-fit: contain;
-    object-fit: contain;
-    -o-object-position: left;
-    object-position: left;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+  object-fit: contain;
+  -o-object-position: left;
+  object-position: left;
 }
 
 /* Основная навигация */
@@ -89,7 +91,7 @@
   box-shadow: 0px 0px 4px 2px #003466;
 }
 
-.nav-link:active {
+/* .nav-link:active {
   background: white;
   color: #003465;
   box-shadow: 0px 0px 4px 2px #003466;
@@ -100,7 +102,7 @@
   background: white;
   color: #003465;
   box-shadow: 0px 0px 4px 2px #003466;
-}
+} */
 
 /* Правая часть */
 .header-actions {
@@ -109,24 +111,31 @@
   align-items: center;
 }
 
-/* Ссылки для иконок */
-.heart-icon-link,
-.lock-icon-link,
-.profile-icon-link {
-  display: contents;
-  text-decoration: none;
+
+/* Кнопка выхода */
+.logout-btn {
+  background-color: #dc3545;
+  margin-left: 8px;
 }
 
-/* Стиль для активных синих кнопок */
-.heart-icon-link.active .blue-btn,
-.lock-icon-link.active .blue-btn,
-.profile-icon-link.active .blue-btn {
-  background: white !important;
-  box-shadow: 0px 0px 4px 2px #003466 !important;
+.logout-btn:hover {
+  background-color: #c82333;
 }
 
-/* Синяя кнопка для иконок */
+/* Контейнер профиля */
+.profile-container {
+  display: flex;
+  align-items: center;
+}
+/* =========================== */
+/* АНИМАЦИЯ ДЛЯ КНОПОК С ИКОНКАМИ */
+/* =========================== */
+
+/* Базовые стили для всех кнопок */
 .blue-btn {
+  position: relative;
+  width: 60px;
+  height: 58px;
   background: #003466;
   border: none;
   border-radius: 25px;
@@ -135,64 +144,127 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  position: relative;
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
   border: 2px solid transparent;
-  transition: all 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   outline: none;
+  overflow: hidden;
 }
 
-/* Размер кнопки */
-.blue-btn:not(.profile) {
-  width: 60px;
-  height: 58px;
+/* Индивидуальные градиенты для каждой кнопки */
+/* .heart-icon-link .blue-btn {
+  --i: #ff6b6b;
+  --j: #ff8e8e;
 }
 
-/* Эффект наведения */
+.lock-icon-link .blue-btn {
+  --i: #4ecdc4;
+  --j: #6ee7e0;
+}
+.lock-icon-link .active{
+  background-color: #6d74dc;
+}
+.profile-icon-link .blue-btn {
+  --i: #6d74dc;
+  --j: #2d28b3;
+} */
+
+/* Градиентный фон при hover */
+
+.blue-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 25px;
+  background:linear-gradient(90deg, rgba(0, 52, 102, 1) 0%, rgba(23, 84, 161, 1) 40%, rgba(255, 255, 255, 0.7) 110%);
+  opacity: 0;
+  transition: 0.5s;
+  z-index: 1;
+}
+
+/* Эффект свечения */
+.blue-btn::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+  background: linear-gradient(45deg, var(--i), var(--j));
+  transition: 0.5s;
+  filter: blur(15px);
+  z-index: -1;
+  opacity: 0;
+}
+
+/* Эффекты при наведении */
 .blue-btn:hover {
-  background: rgba(23, 84, 161, 1);
+  width: 180px;
+  background: transparent; /* Убираем фон, чтобы градиент был виден */
+  /* box-shadow: 0 10px 25px rgba(0, 0, 0, 0); */
+  border: none;
 }
 
-/* Активная кнопка (когда нажата навигация) */
-.blue-btn.active {
-  background: white !important;
-  box-shadow: 0px 0px 4px 2px #003466 !important;
+.blue-btn:hover::before {
+  opacity: 1;
 }
 
-/* Состояние нажатия (тачскрин) */
-.blue-btn:active {
-  background: white !important;
-  box-shadow: 0px 0px 4px 2px #003466 !important;
-  transform: scale(0.98);
+.blue-btn:hover::after {
+  opacity: 0.5;
 }
 
-/* Фокус кнопки */
-.blue-btn:focus {
-  outline: none;
-  background: white !important;
-  box-shadow: 0px 0px 4px 2px #003466 !important;
-}
-
-/* Wrapper для иконок и картинок на кнопках */
+/* Контейнер для иконки */
 .btn-icon-wrapper {
+  position: relative;
+  z-index: 2;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 12px;
-  border-radius: 8px;
+  align-items: center;
+  transition: 0.5s;
+  transition-delay: 0.25s;
 }
 
-/* Изображение внутри wrapper */
-.btn-img {
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
+.blue-btn:hover .btn-icon-wrapper {
+  transform: scale(0);
+  transition-delay: 0s;
 }
 
-/* Бейдж на иконке корзины */
+/* Стили для иконок */
+.btn-svg {
+  color: #ffffff;
+  width: 24px;
+  height: 24px;
+  transition: 0.5s;
+  z-index: 2;
+}
+
+.blue-btn:hover .btn-svg {
+  color: #fff;
+}
+
+/* Текст, который появляется при наведении */
+.btn-text {
+  position: absolute;
+  color: #fff;
+  font-size: 1.1em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transform: scale(0);
+  transition: 0.5s;
+  transition-delay: 0s;
+  white-space: nowrap;
+  z-index: 2;
+  font-weight: 500;
+}
+
+.blue-btn:hover .btn-text {
+  transform: scale(1);
+  transition-delay: 0.25s;
+}
+
+/* Стили для бейджа корзины */
 .btn-badge {
   position: absolute;
-  font-family: 'Kontora', sans-serif;
   top: -6px;
   right: -6px;
   background: #ffffff;
@@ -206,305 +278,49 @@
   align-items: center;
   justify-content: center;
   border: 2px solid rgba(0, 52, 102, 1);
-  z-index: 1;
+  z-index: 3;
+  transition: 0.5s;
+}
+
+.blue-btn:hover .btn-badge {
+  transform: scale(0);
+  transition-delay: 0s;
+}
+
+/* Стили для активного состояния */
+.blue-btn.active {
+  background: white ;
+  box-shadow: 0px 0px 4px 2px #003466;
+}
+.blue-btn.active:hover {
+  box-shadow: none;
+}
+
+.blue-btn.active .btn-svg {
+  color: #003466;
+}
+
+.blue-btn.active::before,
+.blue-btn.active::after {
+  box-shadow: none;
 }
 
 /* Дополнительные стили для доступности */
-.nav-link[tabindex="-1"]:focus,
+/* .nav-link[tabindex="-1"]:focus,
 .blue-btn[tabindex="-1"]:focus {
   outline: none;
   color: #ffffff;
   background: #003466 !important;
-  
-}
+} */
 
-.nav-link[tabindex="-1"]:active,
+/* .nav-link[tabindex="-1"]:active,
 .blue-btn[tabindex="-1"]:active {
   background: #ffffff !important;
   color: #003466;
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
   transform: none;
-}
+} */
 
-/* =========================== */
-/* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ */
-/* =========================== */
-
-/* Планшеты (768px - 1024px) */
-@media (max-width: 1024px) {
-  .header {
-    padding: 0 50px;
-  }
-  
-  .nav-link {
-    font-size: 20px;
-    padding: 6px 12px;
-  }
-  
-  .nav-list {
-    gap: 15px;
-  }
-  
-  .header-actions {
-    gap: 15px;
-  }
-  
-  .blue-btn:not(.profile) {
-    width: 50px;
-    height: 48px;
-  }
-  
-  .btn-img {
-    width: 25px;
-    height: 25px;
-  }
-}
-
-/* Большие телефоны (576px - 768px) */
-@media (max-width: 768px) {
-  .header {
-    padding: 0 30px;
-  }
-  
-  .header-container {
-    padding: 0.8rem 0;
-  }
-  
-  .logo-image {
-    min-width: 50px;
-    width: 12vw;
-  }
-  
-  .main-nav {
-    padding-right: 10px;
-  }
-  
-  .nav-list {
-    gap: 10px;
-  }
-  
-  .nav-link {
-    font-size: 18px;
-    padding: 5px 10px;
-  }
-  
-  .header-actions {
-    gap: 10px;
-  }
-  
-  .blue-btn:not(.profile) {
-    width: 45px;
-    height: 43px;
-  }
-  
-  .btn-img {
-    width: 22px;
-    height: 22px;
-  }
-  
-  .btn-badge {
-    width: 18px;
-    height: 18px;
-    font-size: 12px;
-    top: -5px;
-    right: -5px;
-  }
-}
-
-/* Средние телефоны (425px - 576px) */
-@media (max-width: 576px) {
-  .header {
-    padding: 0 20px;
-  }
-  
-  .header-container {
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px 0;
-  }
-  
-  .logo-link {
-    justify-content: center;
-  }
-  
-  .logo-image {
-    width: 40vw;
-    min-width: 120px;
-    max-width: 180px;
-  }
-  
-  .main-nav {
-    padding-right: 0;
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .nav-list {
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .nav-link {
-    font-size: 16px;
-    padding: 6px 12px;
-  }
-  
-  .header-actions {
-    width: 100%;
-    justify-content: center;
-    gap: 20px;
-  }
-  
-  .blue-btn:not(.profile) {
-    width: 50px;
-    height: 48px;
-  }
-}
-
-/* Маленькие телефоны (375px - 425px) */
-@media (max-width: 425px) {
-  .header {
-    padding: 0 15px;
-  }
-  
-  .nav-list {
-    gap: 6px;
-  }
-  
-  .nav-link {
-    font-size: 14px;
-    padding: 5px 10px;
-  }
-  
-  .header-actions {
-    gap: 15px;
-  }
-  
-  .blue-btn:not(.profile) {
-    width: 45px;
-    height: 43px;
-  }
-  
-  .btn-img {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .btn-badge {
-    width: 16px;
-    height: 16px;
-    font-size: 10px;
-  }
-}
-
-/* Очень маленькие телефоны (до 375px) */
-@media (max-width: 375px) {
-  .header {
-    padding: 0 10px;
-  }
-  
-  .nav-list {
-    gap: 4px;
-  }
-  
-  .nav-link {
-    font-size: 13px;
-    padding: 4px 8px;
-  }
-  
-  .header-actions {
-    gap: 12px;
-  }
-  
-  .blue-btn:not(.profile) {
-    width: 40px;
-    height: 38px;
-  }
-  
-  .btn-img {
-    width: 18px;
-    height: 18px;
-  }
-}
-
-/* Гамбургер-меню для очень маленьких экранов */
-@media (max-width: 320px) {
-  .header-container {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .nav-list {
-    flex-direction: column;
-    gap: 8px;
-    width: 100%;
-  }
-  
-  .nav-item {
-    width: 100%;
-    text-align: center;
-  }
-  
-  .nav-link {
-    width: 100%;
-    justify-content: center;
-    font-size: 15px;
-  }
-  
-  .header-actions {
-    justify-content: space-around;
-    width: 100%;
-  }
-}
-
-/* Для ландшафтной ориентации */
-@media (max-height: 500px) and (orientation: landscape) {
-  .header-container {
-    padding: 10px 0;
-  }
-  
-  .nav-link {
-    font-size: 14px;
-    padding: 4px 8px;
-  }
-  
-  .blue-btn:not(.profile) {
-    width: 40px;
-    height: 38px;
-  }
-}
-
-/* Для темной темы на мобильных */
-@media (prefers-color-scheme: dark) and (max-width: 768px) {
-  .header {
-    background: #1a1a1a;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  }
-  
-  .nav-link.active {
-    background: #2d2d2d;
-    color: #4a9eff;
-  }
-  
-  .blue-btn.active {
-    background: #2d2d2d !important;
-  }
-}
-
-/* Улучшение тач-интерфейса */
-@media (hover: none) and (pointer: coarse) {
-  
-  .blue-btn:hover {
-    background: #003466;
-  }
-  
-  .nav-link:active,
-  .blue-btn:active {
-    transform: scale(0.95);
-    transition: transform 0.1s;
-  }
-}
 /* Бургер-меню */
 .burger-menu {
   display: none;
@@ -543,8 +359,51 @@
   transform: rotate(-45deg);
 }
 
+/* =========================== */
+/* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ */
+/* =========================== */
+
+/* Планшеты (768px - 1024px) */
+@media (max-width: 1024px) {
+  .header {
+    padding: 0 50px;
+  }
+  
+  .nav-link {
+    font-size: 20px;
+    padding: 6px 12px;
+  }
+  
+  .nav-list {
+    gap: 15px;
+  }
+  
+  .header-actions {
+    gap: 15px;
+  }
+  
+  .blue-btn {
+    width: 50px;
+    height: 48px;
+  }
+}
+
 /* Мобильная навигация */
 @media (max-width: 768px) {
+  .header {
+    padding: 0 30px;
+  }
+  
+  .header-container {
+    padding: 0.8rem 0;
+    justify-content: space-between;
+  }
+  
+  .logo-image {
+    min-width: 50px;
+    width: 12vw;
+  }
+  
   .burger-menu {
     display: flex;
   }
@@ -608,81 +467,110 @@
   }
 
   @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
-  /* Корректировка header-container для мобильной версии */
+  /* Адаптация анимированных кнопок для мобильной версии */
+  .main-nav .blue-btn {
+    width: 50px;
+    height: 48px;
+  }
+
+  .main-nav .blue-btn:hover {
+    width: 50px; /* Отключаем расширение на мобильных */
+  }
+
+  .main-nav .btn-text {
+    display: none; /* Скрываем текст на мобильных */
+  }
+
+  .main-nav .btn-icon-wrapper {
+    transform: scale(1) !important; /* Фиксируем иконки */
+  }
+}
+
+/* Средние телефоны (425px - 576px) */
+@media (max-width: 576px) {
+  .header {
+    padding: 0 20px;
+  }
+  
   .header-container {
-    position: relative;
-    justify-content: space-between;
-    padding: 1rem 15px;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 0;
   }
-
-  .logo {
-    flex: 1;
+  
+  .logo-link {
+    justify-content: center;
   }
-
+  
   .logo-image {
-    width: 120px;
-    height: auto;
+    width: 40vw;
+    min-width: 120px;
+    max-width: 180px;
+  }
+  
+  .nav-list {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .nav-link {
+    font-size: 16px;
+    padding: 6px 12px;
+  }
+  
+  .header-actions {
+    width: 100%;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .blue-btn {
+    width: 50px;
+    height: 48px;
+  }
+}
+
+/* Маленькие телефоны (до 425px) */
+@media (max-width: 425px) {
+  .header {
+    padding: 0 15px;
+  }
+  
+  .nav-link {
+    font-size: 14px;
+    padding: 5px 10px;
+  }
+  
+  .blue-btn {
+    width: 45px;
+    height: 43px;
+  }
+  
+  .btn-badge {
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    top: -5px;
+    right: -5px;
   }
 }
 
 /* Для очень маленьких экранов */
-@media (max-width: 480px) {
-  .main-nav {
-    width: 90%;
-    padding: 70px 15px 15px;
+@media (max-width: 375px) {
+  .blue-btn {
+    width: 40px;
+    height: 38px;
   }
-
-  .main-nav .nav-link {
-    font-size: 16px;
-    padding: 10px 15px;
+  
+  .btn-svg {
+    width: 20px;
+    height: 20px;
   }
-
-  .main-nav .header-actions {
-    gap: 10px;
-  }
-
-  .main-nav .blue-btn:not(.profile) {
-    width: 45px;
-    height: 43px;
-  }
-
-  .logo-image {
-    width: 100px;
-  }
-}
-
-/* Для альбомной ориентации на мобильных */
-@media (max-height: 500px) and (orientation: landscape) and (max-width: 768px) {
-  .main-nav {
-    padding: 60px 15px 15px;
-  }
-
-  .main-nav .nav-list {
-    gap: 10px;
-  }
-
-  .main-nav .nav-link {
-    padding: 8px 15px;
-  }
-}
-
-/* Улучшение доступности */
-.burger-menu:focus {
-  outline: 2px solid #003466;
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-.burger-menu:focus:not(:focus-visible) {
-  outline: none;
 }
 
 /* Анимация для пунктов меню при открытии */
@@ -700,5 +588,27 @@
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+/* Улучшение тач-интерфейса */
+@media (hover: none) and (pointer: coarse) {
+  .blue-btn:hover {
+    width: 60px; /* Отключаем расширение на тач-устройствах */
+    background: #003466;
+  }
+  
+  .blue-btn:hover .btn-icon-wrapper {
+    transform: scale(1); /* Фиксируем иконки */
+  }
+  
+  .btn-text {
+    display: none; /* Скрываем текст на тач-устройствах */
+  }
+  
+  .nav-link:active,
+  .blue-btn:active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
   }
 }

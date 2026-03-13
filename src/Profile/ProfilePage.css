@@ -468,3 +468,159 @@
   color: #003466;
   font-weight: 500;
 }
+.stats-container {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+/* Заголовок статистики */
+.stats-header {
+  background:linear-gradient(90deg, rgba(0, 52, 102, 1) 0%, rgba(23, 84, 161, 1) 100%);
+  padding: 24px 20px;
+  color: white;
+  text-align: center;
+}
+
+.stats-header h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.stats-header p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Сетка статистики */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 20px;
+  background: #f8f9fa;
+}
+
+/* Карточка статистики */
+ .stat-card-profile {
+    display: flex;
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 20px;
+}
+
+.stat-card:hover {
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
+}
+
+/* Иконка статистики */
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: white;
+}
+
+.stat-icon.tournaments {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-icon.first {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+}
+
+.stat-icon.second {
+  background: linear-gradient(135deg, #C0C0C0 0%, #A7A7A7 100%);
+}
+
+.stat-icon.third {
+  background: linear-gradient(135deg, #CD7F32 0%, #B87333 100%);
+}
+
+.stat-icon.fan {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+}
+
+/* Значение статистики */
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2d3748;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+/* Метка статистики */
+.stat-label {
+  font-size: 12px;
+  color: #718096;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Карточка болельщика */
+.stat-card-profile.fan-card {
+  grid-column: span 2;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  padding: 16px 20px;
+}
+
+.fan-card .stat-icon {
+  margin: 0 16px 0 0;
+}
+
+.fan-card .stat-content {
+  flex: 1;
+}
+
+.fan-card .stat-value {
+  font-size: 28px;
+  margin-bottom: 2px;
+}
+
+/* Прогресс бар */
+.achievement-bar {
+  grid-column: span 2;
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.achievement-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.achievement-percent {
+  color: #667eea;
+  font-size: 18px;
+}
+
+.achievement-stats {
+  display: flex;
+  justify-content: space-around;
+  color: #718096;
+  font-size: 14px;
+}

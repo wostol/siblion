@@ -499,7 +499,7 @@
 }
 
 /* Улучшение для touch-устройств */
-@media (hover: none) and (pointer: coarse) {
+/* @media (hover: none) and (pointer: coarse) {
   .footer-nav-link {
     padding: 10px 15px;
     min-height: 40px;
@@ -516,7 +516,7 @@
   .contact-link-footer {
     padding: 5px 0;
   }
-}
+} */
 
 /* Анимации для лучшего UX */
 @media (prefers-reduced-motion: no-preference) {

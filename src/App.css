@@ -15,19 +15,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Создаем псевдоэлемент для фонового лого */
-/* body::before {
-  content: '';
-  position: fixed;
-  bottom: 20px;
-  right: 20px; 
-  width: 50vh; 
-  height: 50vh; 
-  background: url('lionsib.svg') no-repeat center;
-  background-size: contain; 
-  pointer-events: none;
-} */
-
 .App {
   display: flex;
   flex-direction: column;
@@ -45,13 +32,13 @@ body {
   padding: 0 20px;
 }
 
-/* Стили для ссылок */
+/* О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ */
 a {
   text-decoration: none;
   color: inherit;
 }
 
-/* Утилиты */
+/* О©╫О©╫О©╫О©╫О©╫О©╫О©╫ */
 .text-center {
   text-align: center;
 }

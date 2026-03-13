@@ -1,21 +1,34 @@
 import './App.css';
 import Header from './component/Header';
 import Footer from './component/Footer';
+import Loader from './component/Loader';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
- import EventsPage from './EventsPage'
- import EventDetail from './EventDetail'
- import ProfilePage from './ProfilePage';
- import FavoritesPage from './FavoritesPage'; // Создайте этот компонент
-import CartPage from './CartPage'; // Создайте этот компонент
- import BackgroundLogo from './BackgroundLogo';
- import ShopPage from './ShopPage';
-  // import AuthHandler from './AuthHandler';
+ import EventsPage from './Events/EventsPage';
+ import EventDetail from './Events/EventDetail';
+ import ProfilePage from './Profile/ProfilePage';
+ import FavoritesPage from './Favorite/FavoritesPage'; 
+import CartPage from './Bag/CartPage'; 
+ import ShopPage from './Shop/ShopPage';
+ import React, { useState, useEffect } from 'react';
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <Router>
-      {/* <AuthHandler> */}
       <div className="App">
+        
         <Header />
         
         <main className="main-content">
@@ -26,13 +39,12 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/cart" element={<CartPage/>} />
-            <Route path="/shop" element={<ShopPage />} /> {/* Добавьте этот маршрут */}
+            <Route path="/shop" element={<ShopPage />} /> 
           </Routes>
         </main>
         
         <Footer />
       </div>
-      {/* </AuthHandler> */}
     </Router>
   );
 }

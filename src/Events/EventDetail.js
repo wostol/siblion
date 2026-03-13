@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import './EventDetail.css'
-import logo from './lionsib.svg'
+import logo from '../image/lionsib.svg'
 // Моковые данные для детальной страницы (в будущем из БД)
 const eventDetails = {
   3: {
