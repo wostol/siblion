@@ -8,12 +8,14 @@ import profileIcon from './profile.png';
 import profileIconActive from './profile-activ.png';
 import heartIconActive from './heart-hover.png';
 import lockIconActive from './lock-hover.png';
-import { useAuth } from '../AuthContext';
+// import { useAuth } from '../AuthContext';
+import useAuth from '../auth/useAuth'; // ← Импортируем хук
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAuthenticated, login, logout, user, loading } = useAuth();
+  const { isAuthenticated, user, login, logout, loading } = useAuth();
+  // const { isAuthenticated, login, logout, user, loading } = useAuth();
   
   const [cartItemsCount, setCartItemsCount] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -180,12 +182,16 @@ const Header = () => {
   };
 
   const handleLoginClick = () => {
+    // Сохраняем текущий URL, чтобы вернуться после авторизации
+    sessionStorage.setItem('returnUrl', location.pathname);
     login(); // Запускаем OAuth авторизацию
     setIsMenuOpen(false);
   };
+  
 
   const handleLogoutClick = () => {
     logout(); // Выход из системы
+    navigate('/'); // Перенаправляем на главную
     setIsMenuOpen(false);
   };
 

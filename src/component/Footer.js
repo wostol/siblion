@@ -8,12 +8,15 @@ const Footer = () => {
 
   return (
 <footer className="footer">
+  <div className="footer-logo-wrapper">
+        <div className="footer-logo-container">
+          <img src={logo} alt="XY Connections Logo" className="footer-logo" />
+        </div>
+      </div>
   <div className="footer-container">
     <div className="footer-content">
       {/* Логотип */}
-      <div className="footer-logo-container">
-        <img src={logo} alt="XY Connections Logo" className="footer-logo" />
-      </div>
+
 
       {/* Навигация и контакты */}
       <div className="footer-nav-contacts">
@@ -26,7 +29,21 @@ const Footer = () => {
             <li><a href="/events/3x3" className="footer-nav-link">3 х 3</a></li>
           </ul>
         </div>
-
+         <div className="footer-nav">
+              <h3 className="footer-nav-title">О ПРОЕКТЕ</h3>
+              <ul className="footer-nav-list">
+                <li>
+                  <a href="/how-it-works" className="footer-nav-link">
+                    Как работает система
+                  </a>
+                </li>
+                <li>
+                  <a href="/useful-info" className="footer-nav-link">
+                    Полезная информация
+                  </a>
+                </li>
+              </ul>
+            </div>
         <div className="footer-nav">
           <h3 className="footer-nav-title">ЛИЧНЫЙ КАБИНЕТ</h3>
           <ul className="footer-nav-list">

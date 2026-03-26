@@ -2,20 +2,20 @@ export async function oauthRedirect(){
   await _generateCodeVerifier();
   const codeChallenge = await _generateCodeChallenge();
   const state = _generateState();
-  const redirectUri = window.location.origin + window.location.pathname;
   
-  // Для CRA используем process.env
+  // Теперь будет https://localhost:5173
+  const redirectUri = window.location.origin;
+  
   const clientId = process.env.REACT_APP_TPU_OAUTH_CLIENT_ID;
   
   if (!clientId) {
-    console.error('REACT_APP_TPU_OAUTH_CLIENT_ID не найдена в .env файле');
-    console.log('Доступные переменные:', process.env);
+    console.error('REACT_APP_TPU_OAUTH_CLIENT_ID не найдена');
     return;
   }
   
   const authUrl = `https://oauth.tpu.ru/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=S256`;
   
-  console.log('Redirect URL:', authUrl);
+  console.log('🔐 Redirect URL:', authUrl);
   window.location.href = authUrl;
 }
 /**
@@ -154,7 +154,6 @@ function _generateState() {
   }
 }
 
-
 export function oauthCodeHandler(query) {
   try {
     const searchParams = new URLSearchParams(query);
@@ -166,20 +165,22 @@ export function oauthCodeHandler(query) {
       if(state === _getState()){
         _clearState();
         _clearCodeVerifier();
-        
         return {
           code: code,
           codeVerifier: codeVerifier,
         }
       }
-      throw new Error('Некорректное состояние авторизации');
+      console.error('State mismatch');
+      return null;
     }
+    
+    // Нет кода — это нормально, не выводим ошибку
+    return null;
   } catch (err) {
     console.error("Ошибка OAuth state:", err);
     return null;
   }
 }
-
 function _getState() {
   return sessionStorage.getItem('oauth_state');
 }

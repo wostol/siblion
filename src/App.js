@@ -2,7 +2,6 @@ import './App.css';
 import Header from './component/Header';
 import Footer from './component/Footer';
 import Loader from './component/Loader';
-import { AuthProvider } from './AuthContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
  import EventsPage from './Events/EventsPage';
  import EventDetail from './Events/EventDetail';
@@ -11,6 +10,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import CartPage from './Bag/CartPage'; 
  import ShopPage from './Shop/ShopPage';
  import React, { useState, useEffect } from 'react';
+ import AuthInitializer from './AuthInitializer';
+import ProtectedRoute from './ProtectedRoute';
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -29,25 +30,49 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <AuthProvider>
-        <Header />
-        
-        <main className="main-content">
-        <div className='container-page '>
-          <Routes>
-            <Route path="/" element={<EventsPage />} />
-
-            <Route path="/event/:id" element={<EventDetail />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/favorites" element={<FavoritesPage />} />
-            <Route path="/cart" element={<CartPage/>} />
-            <Route path="/shop" element={<ShopPage />} /> 
-          </Routes>
-          </div>  
-        </main>
-        
-        <Footer />
-        </AuthProvider>
+        {/* AuthInitializer теперь оборачивает всё приложение */}
+        <AuthInitializer>
+          <Header />
+          
+          <main className="main-content">
+            <div className='container-page'>
+              <Routes>
+                {/* Публичные маршруты - доступны всем */}
+                <Route path="/" element={<EventsPage />} />
+                <Route path="/event/:id" element={<EventDetail />} />
+                <Route path="/shop" element={<ShopPage />} />
+                
+                {/* Защищенные маршруты - только для авторизованных */}
+                <Route 
+                  path="/profile" 
+                  element={
+                    <ProtectedRoute>
+                      <ProfilePage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/favorites" 
+                  element={
+                    <ProtectedRoute>
+                      <FavoritesPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/cart" 
+                  element={
+                    <ProtectedRoute>
+                      <CartPage />
+                    </ProtectedRoute>
+                  } 
+                />
+              </Routes>
+            </div>  
+          </main>
+          
+          <Footer />
+        </AuthInitializer>
       </div>
     </Router>
   );

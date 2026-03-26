@@ -3,7 +3,6 @@
   width: 100%;
   background-color: rgba(0, 52, 101, 1);
   color: #ffffff;
-  padding: 40px 0 20px;
 }
 
 .footer-container {
@@ -23,23 +22,36 @@
 }
 
 /* Левая колонка с лого */
+.footer-logo-wrapper {
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none; /* Чтобы логотип не мешал кликам */
+  transform: translateY(-50px);
+}
+
 .footer-logo-container {
-  flex: 0 0 auto;
+  padding: 0 20px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  pointer-events: auto; /* Возвращаем клики на логотип */
 }
 
 .footer-logo {
-  max-height: 83px;
+  max-height: 100px;
   width: auto;
   object-fit: contain;
+  display: block;
 }
 
 /* Навигация и контакты - центральная часть */
 .footer-nav-contacts {
   flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   gap: 66px;
   flex-wrap: wrap;
 }

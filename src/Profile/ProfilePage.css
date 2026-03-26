@@ -710,3 +710,95 @@
   color: #718096;
   font-size: 14px;
 }
+@media (max-width: 768px) {
+  .profile-exit {
+    min-width: 140px;
+    font-size: 13px;
+  }
+  
+  .log-img {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .profile-exit:hover .log-img {
+    transform: translateX(calc(140px - 35px));
+  }
+  
+  .profile-exit:hover span:last-child {
+    transform: translateX(calc(-100% - 16px));
+  }
+  
+  .profile-title {
+    font-size: 40px;
+    line-height: 52px;
+  }
+  
+  .profile-header {
+    margin-bottom: 20px;
+  }
+}
+
+/* Для мобильных устройств (до 480px) */
+@media (max-width: 480px) {
+  .profile-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .profile-exit {
+    min-width: auto;
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+    font-size: 12px;
+  }
+  
+  .log-img {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .profile-exit:hover .log-img {
+    transform: translateX(calc(200px - 31px));
+  }
+  
+  .profile-exit:hover span:last-child {
+    transform: translateX(calc(-100% - 14px));
+  }
+  
+  .profile-title {
+    font-size: 32px;
+    line-height: 42px;
+    text-align: center;
+  }
+}
+
+/* Для очень маленьких экранов (до 360px) */
+@media (max-width: 360px) {
+  .profile-tabs{
+    justify-content: center;
+  }
+  .profile-exit {
+    max-width: 160px;
+    font-size: 11px;
+  }
+  
+  .log-img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .profile-exit:hover .log-img {
+    transform: translateX(calc(160px - 27px));
+  }
+  
+  .profile-exit:hover span:last-child {
+    transform: translateX(calc(-100% - 12px));
+  }
+  
+  .profile-title {
+    font-size: 28px;
+    line-height: 36px;
+  }
+}
