@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import cap from '../image/cap.png'
 import pen from '../image/pen.png'
 import logo from '../component/lionsib.svg'
-import useAuth from '../auth/useAuth';
+import useAuth from '../auth/useAuth'
 
 function ProfilePage () {
   const [activeTab, setActiveTab] = useState('achievements')
@@ -12,54 +12,113 @@ function ProfilePage () {
   const [userLevel, setUserLevel] = useState(null)
   const [userAchievements, setUserAchievements] = useState(null)
   const [orders, setOrders] = useState([])
-  // const { isAuthenticated, user, logout, loading } = useAuth()
-  const { user, loading, updateUser, logout } = useAuth(); 
+  const [allLevels, setAllLevels] = useState([]) // ← НОВОЕ: все уровни из БД
+
+  const { user, loading, updateUser, logout } = useAuth()
   const navigate = useNavigate()
 
-  // Если не авторизован, перенаправляем на главную
-if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="spinner"></div>
-        <p>Загрузка профиля...</p>
-      </div>
-    );
-  }
+  // Загрузка всех уровней из БД
+  useEffect(() => {
+    const fetchLevels = async () => {
+      try {
+        const response = await fetch('/api/levels') // ← Замените на ваш endpoint
+        const data = await response.json()
+        setAllLevels(data)
+      } catch (error) {
+        console.error('Ошибка загрузки уровней:', error)
+        // Fallback данные если API не доступен
+        setAllLevels([
+          {
+            id: 1,
+            name: 'Новичок',
+            min_points: 0,
+            description: 'Начальный этап. Добро пожаловать в клуб!',
+            color: '#003466'
+          },
+          {
+            id: 2,
+            name: 'Львенок',
+            min_points: 50,
+            description: 'Вы делаете первые шаги. Продолжайте в том же духе!',
+            color: '#28a745'
+          },
+          {
+            id: 3,
+            name: 'Хищник',
+            min_points: 200,
+            description: 'Эксклюзивные мероприятия и приоритетная запись.',
+            color: '#0056b3'
+          },
+          {
+            id: 4,
+            name: 'Царь зверей',
+            min_points: 500,
+            description: 'Максимальные привилегии и доступ ко всем событиям.',
+            color: '#FFD700'
+          },
+          {
+            id: 5,
+            name: 'Легенда',
+            min_points: 1000,
+            description: 'Высший уровень. Непревзойдённая активность.',
+            color: '#FF6B6B'
+          }
+        ])
+      }
+    }
 
-  if (!user) {
-    return <div className="error-message">Пользователь не найден</div>;
-  }
+    fetchLevels()
+  }, [])
 
   const handleUpdateName = () => {
-    const newName = prompt('Введите новое имя:', user.name || '');
+    const newName = prompt('Введите новое имя:', user.name || '')
     if (newName && newName !== user.name) {
-      updateUser({ name: newName });
+      updateUser({ name: newName })
     }
-  };
-    const handleLogout = () => {
+  }
 
-      logout(); // Вызываем выход из системы
-      // Редирект на главную страницу
-      navigate('/');
-    
-  };
-  // ИЗВЛЕКАЕМ ДАННЫЕ ПОЛЬЗОВАТЕЛЯ ТОЛЬКО ПОСЛЕ ПРОВЕРОК
-  const userFullName = user?.lastName && user?.firstName && user?.middleName
-    ? `${user.lastName} ${user.firstName} ${user.middleName}`
-    : user?.email || 'Пользователь';
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
+
+  // ИЗВЛЕКАЕМ ДАННЫЕ ПОЛЬЗОВАТЕЛЯ
+  const userFullName =
+    user?.lastName && user?.firstName && user?.middleName
+      ? `${user.lastName} ${user.firstName} ${user.middleName}`
+      : user?.email || 'Пользователь'
 
   const userGroup =
     user?.userInfo?.studyInfo?.data?.studies?.[0]?.gruppa || '8К32'
-
   const userInstitute =
     user?.userInfo?.studyInfo?.data?.studies?.[0]?.department || 'ИШИТР'
 
-  // Сокращаем название института если нужно
   const shortInstitute = userInstitute.includes(
     'Инженерная школа информационных технологий'
   )
     ? 'ИШИТР'
     : userInstitute
+
+  // Определяем статус для каждого уровня
+  const getLevelStatus = levelMinPoints => {
+    const totalPoints = user?.total_points || userLevel?.points || 125
+    if (totalPoints >= levelMinPoints) {
+      return 'completed'
+    }
+    return 'locked'
+  }
+
+  // Находим текущий уровень
+  const getCurrentLevel = () => {
+    const totalPoints = user?.total_points || userLevel?.points || 125
+    const sortedLevels = [...allLevels].sort(
+      (a, b) => b.min_points - a.min_points
+    )
+    return (
+      sortedLevels.find(level => totalPoints >= level.min_points) ||
+      allLevels[0]
+    )
+  }
 
   // Данные для достижений
   const achievementsList = userAchievements || {
@@ -100,7 +159,7 @@ if (loading) {
     }
   ]
 
-  // Заказы (если с сервера пришли пустые, используем тестовые)
+  // Заказы
   const displayOrders =
     orders.length > 0
       ? orders
@@ -137,11 +196,14 @@ if (loading) {
           }
         ]
 
+  const currentLevel = getCurrentLevel()
+  const totalPoints = user?.total_points || userLevel?.points || 125
+
   return (
     <div className='profile-page'>
       <header className='profile-header'>
         <h1 className='profile-title'>Личный кабинет</h1>
-          <button className='profile-exit' onClick={handleLogout}>
+        <button className='profile-exit' onClick={handleLogout}>
           <span className='log-img'>
             <img src={logo} alt='Выход' className='log' />
           </span>
@@ -207,22 +269,28 @@ if (loading) {
 
         {activeTab === 'points' && (
           <div className='points-tab'>
+            {/* Карточка баллов */}
             <div className='points-card'>
               <div className='points-header'>
                 <div className='points-title-section'>
                   <h3>Мои баллы</h3>
-                  <div className='user-level'>
-                    Уровень {userLevel?.level || 2}
-                  </div>
                 </div>
                 <div className='points-total'>
-                  {userLevel?.points || 125} баллов
+                  {userLevel?.points || 125}
+                  <span>баллов</span>
                 </div>
               </div>
 
               <div className='points-details'>
                 <div className='points-item'>
                   <span className='points-label'>
+                    <svg
+                      className='points-label-icon'
+                      viewBox='0 0 24 24'
+                      fill='#FFD700'
+                    >
+                      <path d='M12 2L15 9H22L16 14L19 21L12 16.5L5 21L8 14L2 9H9L12 2Z' />
+                    </svg>
                     Активность на мероприятиях
                   </span>
                   <span className='points-value'>
@@ -230,7 +298,16 @@ if (loading) {
                   </span>
                 </div>
                 <div className='points-item'>
-                  <span className='points-label'>Бонус</span>
+                  <span className='points-label'>
+                    <svg
+                      className='points-label-icon'
+                      viewBox='0 0 24 24'
+                      fill='#FF6B6B'
+                    >
+                      <path d='M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z' />
+                    </svg>
+                    Бонус
+                  </span>
                   <span className='points-value'>
                     +{userLevel?.bonus_points || 40} баллов
                   </span>
@@ -242,26 +319,120 @@ if (loading) {
                   </span>
                 </div>
               </div>
+            </div>
 
-              <div className='points-progress'>
-                <div className='level-info'>
-                  <span className='level-current'>
-                    Уровень {userLevel?.level || 2}
-                  </span>
-                  <span className='level-next'>
-                    Уровень {(userLevel?.level || 2) + 1}
-                  </span>
+            {/* Карточка прогресса уровня */}
+            <div className='level-progress-card'>
+              <div className='level-progress-header'>
+                <div className='level-info-left'>
+                  <div className='level-circle'>{userLevel?.level || 2}</div>
+                  <div>
+                    <h4 className='level-name'>Львёнок</h4>
+                    <p className='level-range'>50 — 199 баллов</p>
+                  </div>
                 </div>
+                <div className='level-info-right'>
+                  <div className='level-next-label'>
+                    <svg viewBox='0 0 24 24' fill='currentColor'>
+                      <path d='M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z' />
+                    </svg>
+                    Уровень 3
+                  </div>
+                  <p className='level-next-value'>от 200 баллов</p>
+                </div>
+              </div>
+
+              <div className='progress-bar-container'>
                 <div className='progress-bar'>
                   <div
                     className='progress-fill'
-                    style={{ width: `${userLevel?.progress || 50}%` }}
-                  ></div>
+                    style={{
+                      width: `${((userLevel?.points || 125) / 200) * 100}%`
+                    }}
+                  />
                 </div>
-                <p className='progress-text'>
-                  До следующего уровня: {userLevel?.points_to_next_level || 75}{' '}
-                  баллов
+                <div className='progress-text'>
+                  <span className='progress-text-left'>
+                    До следующего уровня:{' '}
+                    {userLevel?.points_to_next_level || 75} баллов
+                  </span>
+                  <span className='progress-text-right'>
+                    {userLevel?.points || 125} / 200
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Нижние карточки */}
+            <div className='points-info-grid'>
+              {/* Как достичь следующего уровня */}
+              <div className='info-card'>
+                <div className='info-card-header'>
+                  <div className='info-card-icon'>
+                    <svg viewBox='0 0 24 24' fill='currentColor'>
+                      <path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z' />
+                    </svg>
+                  </div>
+                  <h4 className='info-card-title'>
+                    Как достичь следующего уровня
+                  </h4>
+                </div>
+                <p className='info-card-content'>
+                  Наберите <strong>200 баллов</strong>, участвуя в мероприятиях
+                  и выполняя специальные задания. Каждый балл приближает вас к
+                  новым привилегиям.
                 </p>
+              </div>
+
+              {/* Привилегии уровня 3 */}
+              <div className='info-card'>
+                <div className='info-card-header'>
+                  <div
+                    className='info-card-icon'
+                    style={{
+                      background: 'linear-gradient(135deg, #28a745, #20c997)'
+                    }}
+                  >
+                    <svg viewBox='0 0 24 24' fill='currentColor'>
+                      <path d='M12 2L15 9H22L16 14L19 21L12 16.5L5 21L8 14L2 9H9L12 2Z' />
+                    </svg>
+                  </div>
+                  <h4 className='info-card-title'>Привилегии уровня 3</h4>
+                </div>
+                <ul className='privileges-list'>
+                  <li>
+                    <span className='privilege-check'>
+                      <svg viewBox='0 0 24 24' fill='currentColor'>
+                        <path d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' />
+                      </svg>
+                    </span>
+                    Доступ к эксклюзивным мероприятиям
+                  </li>
+                  <li>
+                    <span className='privilege-check'>
+                      <svg viewBox='0 0 24 24' fill='currentColor'>
+                        <path d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' />
+                      </svg>
+                    </span>
+                    Приоритетная запись на события
+                  </li>
+                  <li>
+                    <span className='privilege-check'>
+                      <svg viewBox='0 0 24 24' fill='currentColor'>
+                        <path d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' />
+                      </svg>
+                    </span>
+                    Уникальный значок профиля
+                  </li>
+                  <li>
+                    <span className='privilege-check'>
+                      <svg viewBox='0 0 24 24' fill='currentColor'>
+                        <path d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' />
+                      </svg>
+                    </span>
+                    Персональные рекомендации
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -269,6 +440,69 @@ if (loading) {
 
         {activeTab === 'achievements' && (
           <div className='achievements-tab'>
+            {/* БЛОК УРОВНЕЙ - НОВОЕ */}
+            <div className='levels-section'>
+              <h3 className='levels-title'>Все уровни</h3>
+              <div className='levels-list'>
+                {allLevels.map(level => {
+                  const status = getLevelStatus(level.min_points)
+                  const isCurrent = currentLevel?.id === level.id
+                  const pointsNeeded =
+                    level.min_points > totalPoints
+                      ? level.min_points - totalPoints
+                      : 0
+
+                  return (
+                    <div
+                      key={level.id}
+                      className={`level-item ${status} ${
+                        isCurrent ? 'current' : ''
+                      }`}
+                    >
+                      <div
+                        className='level-circle'
+                        style={{
+                          background:
+                            status === 'completed'
+                              ? `linear-gradient(135deg, ${
+                                  level.color || '#003466'
+                                }, ${level.color || '#0056b3'})`
+                              : status === 'current'
+                              ? `linear-gradient(135deg, #28a745, #20c997)`
+                              : 'linear-gradient(135deg, #e9ecef, #dee2e6)'
+                        }}
+                      >
+                        {level.id}
+                      </div>
+                      <div className='level-info-block'>
+                        <div className='level-header'>
+                          <h4 className='level-name'>{level.name}</h4>
+                          {status === 'completed'  && (
+                            <span className='level-badge completed'>
+                              ПРОЙДЕН
+                            </span>
+                          )}
+                          {isCurrent && (
+                            <span className='level-badge current'>ТЕКУЩИЙ</span>
+                          )}
+                          {status === 'locked' && pointsNeeded > 0 && (
+                            <span className='level-badge locked'>
+                              {pointsNeeded} БАЛЛОВ
+                            </span>
+                          )}
+                        </div>
+                        <p className='level-points'>
+                          от {level.min_points} баллов
+                        </p>
+                        <p className='level-description'>{level.description}</p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Сетка достижений */}
             <div className='achievements-grid'>
               {achievementsData.map(achievement => (
                 <div
@@ -287,163 +521,189 @@ if (loading) {
             </div>
           </div>
         )}
-
         {activeTab === 'orders' && (
           <div className='orders-tab'>
             {displayOrders.map(order => (
               <div key={order.id} className='order-card'>
-                <div className='order-left'>
-                  <div className='order-image'>
-                    <img src={order.image || cap} alt={order.product} />
-                  </div>
-                  <div className='order-info'>
-                    <h3 className='product-name'>{order.product}</h3>
-                    <p className='product-description'>{order.description}</p>
-                    <div className='product-price-profile'>{order.price}</div>
+                <div className='order-image-container'>
+                  <img src={order.image || cap} alt={order.product} />
+                </div>
+                <div className='order-info-container'>
+                  <h3 className='product-name'>{order.product}</h3>
+                  <div className='order-details'>
+                    <div className='detail-row'>
+                      <span className='detail-label'>Статус:</span>
+                      <span className='detail-value'>{order.status}</span>
+                    </div>
+                    <div className='detail-row'>
+                      <span className='detail-label'>Время:</span>
+                      <span className='detail-value'>{order.time}</span>
+                    </div>
+                    <div className='detail-row'>
+                      <span className='detail-label'>Дата:</span>
+                      <span className='detail-value'>{order.date}</span>
+                    </div>
                   </div>
                 </div>
-
-                <div className='order-right'>
-                  <div className='order-status'>
-                    <span
-                      className={`status-badge ${
-                        order.status === 'Доставлен'
-                          ? 'status-delivered'
-                          : 'status-work'
-                      }`}
-                    >
-                      {order.status}
-                    </span>
-                  </div>
-                  <div className='order-datetime'>
-                    <div className='datetime-item'>
-                      <span className='datetime-label'>Время:</span>
-                      <span className='datetime-value'>{order.time}</span>
-                    </div>
-                    <div className='datetime-item'>
-                      <span className='datetime-label'>Дата:</span>
-                      <span className='datetime-value'>{order.date}</span>
-                    </div>
-                  </div>
+                <div className='order-price-container'>
+                  <span className='order-price'>
+                    -{order.price.replace(' Б', '')} Б
+                  </span>
                 </div>
               </div>
             ))}
           </div>
         )}
         {activeTab === 'statictick' && (
-          <div className='statictick-tab'>
-            <div className='stats-container'>
-              {/* Заголовок статистики */}
-              <div className='stats-header'>
-                <h2>Моя статистика</h2>
-                <p>Достижения и участие в турнирах</p>
-              </div>
+  <div className='statistics-tab'>
+    {/* Заголовок статистики */}
+    {/* <div className='stats-header-section'>
+      <h2 className='stats-main-title'>Моя статистика</h2>
+      <p className='stats-subtitle'>Ваши достижения и активность в системе</p>
+    </div> */}
 
-              {/* Сетка статистики */}
-              <div className='stats-grid'>
-                {/* Участие в турнирах */}
-                <div className='stat-card-profile'>
-                  <div className='stat-icon tournaments'>
-                    <svg
-                      width='32'
-                      height='32'
-                      viewBox='0 0 24 24'
-                      fill='currentColor'
-                    >
-                      <path d='M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z' />
-                    </svg>
-                  </div>
-                  <div className='stat-value'>24</div>
-                  <div className='stat-label'>Турниров</div>
-                </div>
+    {/* Основные показатели */}
+    <div className='stats-overview'>
+      <div className='stat-card-modern'>
+        <div className='stat-card-icon tournaments'>
+          <svg width='32' height='32' viewBox='0 0 24 24' fill='currentColor'>
+            <path d='M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z'/>
+          </svg>
+        </div>
+        <div className='stat-card-content'>
+          <div className='stat-value-large'>24</div>
+          <div className='stat-label-medium'>Участий в мероприятиях</div>
+        </div>
+      </div>
 
-                {/* Первые места */}
-                <div className='stat-card-profile'>
-                  <div className='stat-icon first'>
-                    <svg
-                      width='32'
-                      height='32'
-                      viewBox='0 0 24 24'
-                      fill='currentColor'
-                    >
-                      <path d='M12 2L15 9H22L16 14L19 21L12 16.5L5 21L8 14L2 9H9L12 2Z' />
-                    </svg>
-                  </div>
-                  <div className='stat-value'>8</div>
-                  <div className='stat-label'>1-х мест</div>
-                </div>
+      <div className='stat-card-modern'>
+        <div className='stat-card-icon points'>
+          <svg width='32' height='32' viewBox='0 0 24 24' fill='currentColor'>
+            <path d='M12 2L15 9H22L16 14L19 21L12 16.5L5 21L8 14L2 9H9L12 2Z'/>
+          </svg>
+        </div>
+        <div className='stat-card-content'>
+          <div className='stat-value-large'>125</div>
+          <div className='stat-label-medium'>Всего баллов</div>
+        </div>
+      </div>
 
-                {/* Вторые места */}
-                <div className='stat-card-profile'>
-                  <div className='stat-icon second'>
-                    <svg
-                      width='32'
-                      height='32'
-                      viewBox='0 0 24 24'
-                      fill='currentColor'
-                    >
-                      <path d='M12 2L15 9H22L16 14L19 21L12 16.5L5 21L8 14L2 9H9L12 2Z' />
-                    </svg>
-                  </div>
-                  <div className='stat-value'>6</div>
-                  <div className='stat-label'>2-х мест</div>
-                </div>
+      <div className='stat-card-modern'>
+        <div className='stat-card-icon level'>
+          <svg width='32' height='32' viewBox='0 0 24 24' fill='currentColor'>
+            <path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/>
+          </svg>
+        </div>
+        <div className='stat-card-content'>
+          <div className='stat-value-large'>2</div>
+          <div className='stat-label-medium'>Текущий уровень</div>
+        </div>
+      </div>
+    </div>
 
-                {/* Третьи места */}
-                <div className='stat-card-profile'>
-                  <div className='stat-icon third'>
-                    <svg
-                      width='32'
-                      height='32'
-                      viewBox='0 0 24 24'
-                      fill='currentColor'
-                    >
-                      <path d='M12 2L15 9H22L16 14L19 21L12 16.5L5 21L8 14L2 9H9L12 2Z' />
-                    </svg>
-                  </div>
-                  <div className='stat-value'>4</div>
-                  <div className='stat-label'>3-х мест</div>
-                </div>
+    {/* Достижения по местам */}
+    <div className='stats-achievements-grid'>
+      <div className='achievement-place-card first'>
+        <div className='place-icon'>🥇</div>
+        <div className='place-value'>8</div>
+        <div className='place-label'>Первых мест</div>
+        <div className='place-percentage'>33%</div>
+      </div>
 
-                {/* Болельщик - на всю ширину */}
-                <div className='stat-card-profile fan-card'>
-                  <div className='stat-icon fan'>
-                    <svg
-                      width='32'
-                      height='32'
-                      viewBox='0 0 24 24'
-                      fill='currentColor'
-                    >
-                      <path d='M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z' />
-                    </svg>
-                  </div>
-                  <div className='stat-content'>
-                    <div className='stat-value'>15</div>
-                    <div className='stat-label'>Раз был болельщиком</div>
-                  </div>
-                </div>
+      <div className='achievement-place-card second'>
+        <div className='place-icon'>🥈</div>
+        <div className='place-value'>6</div>
+        <div className='place-label'>Вторых мест</div>
+        <div className='place-percentage'>25%</div>
+      </div>
 
-                {/* Прогресс побед */}
-                <div className='achievement-bar'>
-                  <div className='achievement-title'>
-                    <span>🏆 Процент побед</span>
-                  </div>
-                  <div className='progress-bar'>
-                    <div
-                      className='progress-fill'
-                      style={{ width: '75%' }}
-                    ></div>
-                  </div>
-                  <div className='achievement-stats'>
-                    <span>🥇 {8} первых</span>
-                    <span>🥈 {6} вторых</span>
-                    <span>🥉 {4} третьих</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <div className='achievement-place-card third'>
+        <div className='place-icon'>🥉</div>
+        <div className='place-value'>4</div>
+        <div className='place-label'>Третьих мест</div>
+        <div className='place-percentage'>17%</div>
+      </div>
+    </div>
+
+    {/* История мероприятий */}
+    <div className='stats-events-history'>
+      <h3 className='history-title'>История мероприятий</h3>
+      <div className='events-history-list'>
+        <div className='event-history-item'>
+          <div className='event-history-date'>
+            <div className='event-day'>15</div>
+            <div className='event-month'>Дек 2025</div>
           </div>
-        )}
+          <div className='event-history-info'>
+            <h4 className='event-history-name'>Гандбольный турнир</h4>
+            <p className='event-history-role'>Участник • 3 место 🥉</p>
+            <p className='event-history-points'>+150 баллов</p>
+          </div>
+          <div className='event-history-badge participant'>Участник</div>
+        </div>
+
+        <div className='event-history-item'>
+          <div className='event-history-date'>
+            <div className='event-day'>20</div>
+            <div className='event-month'>Ноя 2025</div>
+          </div>
+          <div className='event-history-info'>
+            <h4 className='event-history-name'>Шахматный турнир</h4>
+            <p className='event-history-role'>Участник • 1 место 🥇</p>
+            <p className='event-history-points'>+200 баллов</p>
+          </div>
+          <div className='event-history-badge winner'>Победитель</div>
+        </div>
+
+        <div className='event-history-item'>
+          <div className='event-history-date'>
+            <div className='event-day'>10</div>
+            <div className='event-month'>Ноя 2025</div>
+          </div>
+          <div className='event-history-info'>
+            <h4 className='event-history-name'>Баскетбол 3x3</h4>
+            <p className='event-history-role'>Болельщик</p>
+            <p className='event-history-points'>+30 баллов</p>
+          </div>
+          <div className='event-history-badge spectator'>Болельщик</div>
+        </div>
+
+        <div className='event-history-item'>
+          <div className='event-history-date'>
+            <div className='event-day'>05</div>
+            <div className='event-month'>Окт 2025</div>
+          </div>
+          <div className='event-history-info'>
+            <h4 className='event-history-name'>Лыжный марафон</h4>
+            <p className='event-history-role'>Участник • 2 место 🥈</p>
+            <p className='event-history-points'>+175 баллов</p>
+          </div>
+          <div className='event-history-badge participant'>Участник</div>
+        </div>
+
+        <div className='event-history-item'>
+          <div className='event-history-date'>
+            <div className='event-day'>28</div>
+            <div className='event-month'>Сен 2025</div>
+          </div>
+          <div className='event-history-info'>
+            <h4 className='event-history-name'>Волейбольный турнир</h4>
+            <p className='event-history-role'>Участник • 1 место 🥇</p>
+            <p className='event-history-points'>+180 баллов</p>
+          </div>
+          <div className='event-history-badge winner'>Победитель</div>
+        </div>
+      </div>
+      
+      {/* <button className='load-more-btn'>
+        Загрузить еще
+        <svg width='16' height='16' viewBox='0 0 24 24' fill='currentColor'>
+          <path d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z'/>
+        </svg>
+      </button> */}
+    </div>
+  </div>
+)}
       </div>
     </div>
   )

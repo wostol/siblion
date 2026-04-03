@@ -3,140 +3,159 @@ import './EventCard.css'
 import { useNavigate } from 'react-router-dom'
 
 const EventCard = ({ event, isPast = false }) => {
-  const { 
+  const {
     id,
-    title, 
-    startDate,      // ← изменили date на startDate
-    location, 
+    title,
+    startDate,
+    location,
     description,
-    participantPoints,    // ← добавили
-    fanPoints,            // ← добавили
-    registrationDeadline, // ← добавили
-    status                // ← добавили
-  } = event;
-  
-  const navigate = useNavigate();
+    participantPoints,
+    fanPoints,
+    registrationDeadline,
+    status
+  } = event
+
+  const navigate = useNavigate()
 
   // Обработчик клика по карточке
   const handleCardClick = (e) => {
-    // Предотвращаем переход при клике на кнопки
     if (e.target.closest('.btn') || e.target.closest('.event-actions')) {
-      return;
+      return
     }
-    navigate(`/event/${id}`);
-  };
+    navigate(`/event/${id}`)
+  }
 
   // Форматирование даты
   const formatDate = (dateString) => {
-    if (!dateString) return 'Дата не указана';
-    const dateObj = new Date(dateString);
+    if (!dateString) return 'Дата не указана'
+    const dateObj = new Date(dateString)
     return dateObj.toLocaleDateString('ru-RU', {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
-    });
-  };
+    })
+  }
 
   // Форматирование времени
   const formatTime = (dateString) => {
-    if (!dateString) return '';
-    const dateObj = new Date(dateString);
+    if (!dateString) return ''
+    const dateObj = new Date(dateString)
     return dateObj.toLocaleTimeString('ru-RU', {
       hour: '2-digit',
       minute: '2-digit'
-    });
-  };
+    })
+  }
 
-  // Форматирование даты регистрации
+  // Форматирование дедлайна
   const formatDeadline = (dateString) => {
-    if (!dateString) return null;
-    const dateObj = new Date(dateString);
+    if (!dateString) return null
+    const dateObj = new Date(dateString)
     return dateObj.toLocaleDateString('ru-RU', {
       day: 'numeric',
       month: 'long'
-    });
-  };
+    })
+  }
+
+  // Статус для бейджа
+  const getStatusText = () => {
+    if (!status) return isPast ? 'Завершено' : ''
+    if (status === 'active' && !isPast) return 'Идет регистрация'
+    if (status === 'active' && isPast) return 'Завершено'
+    if (status === 'completed') return 'Завершено'
+    if (status === 'cancelled') return 'Отменено'
+    return ''
+  }
+
+  const statusText = getStatusText()
 
   return (
-    <div 
+    <div
       className={`event-card ${isPast ? 'past-event' : 'future-event'}`}
       onClick={handleCardClick}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          handleCardClick(e);
+          e.preventDefault()
+          handleCardClick(e)
         }
       }}
       aria-label={`Подробнее о мероприятии: ${title}`}
     >
-      <div className="event-header">
-        <div className="ag-courses-item_bg"></div>
-        <h3 className="event-title">{title}</h3>
+      {/* Декоративный угол */}
+      <div className="card-corner-decoration"></div>
+
+      {/* Заголовок карточки */}
+      <div className="card-header">
+        <h2 className="event-title">{title}</h2>
         
-        {/* Бейдж статуса */}
-        {status && (
-          <div className={`event-status-badge ${status}`}>
-            {status === 'active' && !isPast ? 'Идет регистрация' : 
-             status === 'active' && isPast ? 'Завершено' :
-             status === 'completed' ? 'Завершено' :
-             status === 'cancelled' ? 'Отменено' : ''}
-          </div>
-        )}
-        
-        <div className="event-details-header">
-          <div className="event-date-header">
-            <svg className="icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM5 6v2h14V6H5z"/>
-            </svg>
-            <span>{formatDate(startDate)} в {formatTime(startDate)}</span>
-          </div>
+        <div className="event-meta-top">
+          {statusText && (
+            <span className={`status-badge ${status}`}>
+              {statusText}
+            </span>
+          )}
           
-          <div className="event-location-header">
-            <svg className="icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-            </svg>
-            <span>{location}</span>
+          <div className="event-meta-row">
+            <div className="meta-item">
+              <svg className="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM5 6v2h14V6H5z"/>
+              </svg>
+              <span>{formatDate(startDate)} в {formatTime(startDate)}</span>
+            </div>
+            
+            <div className="meta-item">
+              <svg className="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+              <span>{location}</span>
+            </div>
           </div>
         </div>
       </div>
-      
-      {/* Основное содержимое */}
-      <div className="event-content">
-        {/* Описание */}
-        <div className="event-description">
-          <p>{description}</p>
-        </div>
-        
-        {/* Баллы за участие */}
-        {(participantPoints || fanPoints) && (
-          <div className="event-points-info">
-            <div className="points-item">
-              <span className="points-label">🎯 Участник:</span>
+
+      {/* Описание */}
+      <p className="event-description">{description}</p>
+
+      {/* Баллы за участие */}
+      {(participantPoints || fanPoints) && (
+        <div className="points-section">
+          {participantPoints && (
+            <div className="points-row">
+              <div className="points-label">
+                <svg className="points-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                <span>Участник:</span>
+              </div>
               <span className="points-value">+{participantPoints} баллов</span>
             </div>
-            <div className="points-item">
-              <span className="points-label">👥 Болельщик:</span>
+          )}
+          
+          {fanPoints && (
+            <div className="points-row">
+              <div className="points-label">
+                <svg className="points-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                </svg>
+                <span>Болельщик:</span>
+              </div>
               <span className="points-value">+{fanPoints} баллов</span>
             </div>
-          </div>
-        )}
-        
-        {/* Дедлайн регистрации */}
-        {registrationDeadline && !isPast && (
-          <div className="event-deadline">
-            <svg className="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm0 13c-2.33 0-4.31-1.46-5.11-3.5h10.22c-.8 2.04-2.78 3.5-5.11 3.5z"/>
-            </svg>
-            <span>Регистрация до {formatDeadline(registrationDeadline)}</span>
-          </div>
-        )}
-      </div>
-      
-      {/* Подвал карточки */}
+          )}
+          
+          {registrationDeadline && !isPast && (
+            <div className="deadline-row">
+              <svg className="deadline-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+              </svg>
+              <span>Регистрация до {formatDeadline(registrationDeadline)}</span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default EventCard;
+export default EventCard

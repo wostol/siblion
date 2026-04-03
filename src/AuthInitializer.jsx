@@ -8,7 +8,7 @@ const AuthInitializer = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { checkAuth, handleAuthCallback, loading } = useAuthStore();
-  const processedRef = useRef(false); // ← добавляем ref, чтобы не обрабатывать дважды
+  const processedRef = useRef(false); 
 
   useEffect(() => {
     checkAuth();

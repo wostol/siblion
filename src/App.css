@@ -66,7 +66,7 @@ a {
 }
 .container-page {
   max-width: 1200px;
-  margin: 2rem auto;
+  margin: 4rem auto;
   padding: 0 20px;
   width: 100%;
   box-sizing: border-box;
@@ -76,7 +76,7 @@ a {
 @media (max-width: 1024px) {
   .container-page {
     max-width: 90%;
-    margin: 1.5rem auto;
+    margin: 4rem auto;
     padding: 0 15px;
   }
 }
@@ -85,7 +85,7 @@ a {
 @media (max-width: 768px) {
   .container-page {
     max-width: 95%;
-    margin: 1rem auto;
+    margin: 4rem auto;
     padding: 0 12px;
   }
 }
@@ -94,7 +94,7 @@ a {
 @media (max-width: 480px) {
   .container-page {
     max-width: 100%;
-    margin: 0.8rem auto;
+    margin: 3rem auto;
     padding: 0 10px;
   }
 }
@@ -102,7 +102,7 @@ a {
 /* Очень маленькие экраны */
 @media (max-width: 320px) {
   .container-page {
-    margin: 0.5rem auto;
+    margin: 3rem auto;
     padding: 0 8px;
   }
 }
