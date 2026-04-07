@@ -71,7 +71,17 @@ a {
   width: 100%;
   box-sizing: border-box;
 }
-
+::-webkit-scrollbar {
+    width: 5px;
+    height: 60px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: var(--color-primary);
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
 /* Планшеты и ноутбуки */
 @media (max-width: 1024px) {
   .container-page {
